@@ -22,7 +22,7 @@ setuptools.setup(
         'License :: OSI Approved :: MIT License'
     ],
     keywords='cyberark aim aam identity access security pam pim pas',
-    python_requires='>=3.*.*, <4'
+    python_requires='>=3.*.*, <4',
     project_urls={
         'Bug Reports': 'https://github.com/infamousjoeg/pyaim/issues/new?assignees=&labels=&template=bug_report.md&title=',
         'Feature Requests': 'https://github.com/infamousjoeg/pyaim/issues/new?assignees=&labels=&template=feature_request.md&title='
