@@ -25,7 +25,7 @@ setuptools.setup(
     python_requires='>=3.*.*, <4',
     project_urls={
         'Bug Reports': 'https://github.com/infamousjoeg/pyaim/issues/new?assignees=&labels=&template=bug_report.md&title=',
-        'Feature Requests': 'https://github.com/infamousjoeg/pyaim/issues/new?assignees=&labels=&template=feature_request.md&title='
+        'Feature Requests': 'https://github.com/infamousjoeg/pyaim/issues/new?assignees=&labels=&template=feature_request.md&title=',
         'Source': 'https://github.com/infamousjoeg/pyaim'
     }
 )
