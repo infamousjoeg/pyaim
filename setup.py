@@ -13,6 +13,9 @@ setuptools.setup(
     url="https://github.com/infamousjoeg/pyaim",
     license="MIT",
     packages=setuptools.find_packages(),
+    install_requires=[
+        'sarge'
+    ]
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
