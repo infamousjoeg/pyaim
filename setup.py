@@ -15,11 +15,11 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/infamousjoeg/pyaim",
     license="MIT",
-    platform="OS Independent",
     packages=setuptools.find_packages(),
     classifiers=[
         'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License'
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent'
     ],
     keywords='cyberark aim aam identity access security pam pim pas',
     project_urls={
