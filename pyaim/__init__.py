@@ -54,7 +54,7 @@ class clipasswordsdk:
                     )
                 )
 
-                if 'APPAP282E' is in response:
+                if 'APPAP282E' in response:
                     time.sleep(3)
                     response = None
                 else:
