@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pyaim",
-    version="0.0.5",
+    version="0.0.6",
     author="Joe Garcia",
     author_email="joe.garcia@cyberark.com",
     long_description=long_description,
@@ -15,7 +15,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'sarge'
-    ]
+    ],
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
