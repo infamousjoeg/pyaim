@@ -3,12 +3,9 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-with open("VERSION", "r") as version_file:
-    version = version_file.read().strip()
-
 setuptools.setup(
     name="pyaim",
-    version=version,
+    version="0.0.3",
     author="Joe Garcia",
     author_email="joe.garcia@cyberark.com",
     long_description=long_description,
