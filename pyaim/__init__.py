@@ -3,6 +3,7 @@ import time
 from sys import platform
 
 import pyaim.config as cfg
+from sarge import capture_stdout, shell_format
 
 
 class clipasswordsdk:
@@ -42,31 +43,21 @@ class clipasswordsdk:
         elif obj is None:
             raise Exception('No Object Name', 'Please declare a valid Object name.')
         else:
-            self.appid = appid
-            self.safe = safe
-            self.object = obj
+            response = None
+            while response is None:
+                response = capture_stdout(
+                    shell_format('{0} GetPassword -p AppDescs.AppID={1} -p Query="safe={2};Folder=Root;Object={3} -p Reason="Checked out using pyaim" -p FailRequestOnPasswordChange=true -o PassProps.Username, Password, PassProps.Address, PassProps.Port, PasswordChangeInProcess',
+                        self.cli,
+                        appid,
+                        safe,
+                        obj
+                    )
+                )
 
-        response = None
-        while response is None:
-            response = os.system(
-                '{cli} GetPassword \
-                    -p AppDescs.AppID={appid} \
-                    -p Query="safe={safe};Folder=Root;Object={object}" \
-                    -p Reason="Checked out using pyaim" \
-                    -p FailRequestOnPasswordChange=true \
-                    -o PassProps.Username, \
-                       Password, \
-                       PassProps.Address, \
-                       PassProps.Port, \
-                       PasswordChangeInProcess'.format(
-                           cli=self.cli,
-                           appid=self.appid,
-                           safe=self.safe,
-                           object=self.object)
-            )
+                if 'APPAP282E' is in response:
+                    time.sleep(3)
+                    response = None
+                else:
+                    break
 
-            if 'APPAP282E' is in response:
-                time.sleep(3)
-                response = None
-            else:
-                return response
+            return response
