@@ -1,3 +1,3 @@
-# pyaim
+# pyAIM
 
-Python Client Library for @CyberArk Application Access Manager
+Python 3 Client Library for CyberArk Application Access Manager
