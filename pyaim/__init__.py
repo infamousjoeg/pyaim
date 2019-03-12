@@ -1,5 +1,5 @@
 import os
-#import time
+import time
 from subprocess import PIPE, Popen
 from sys import platform
 
@@ -12,10 +12,12 @@ class clipasswordsdk(object):
 
         # Check for Linux OS
         if platform == 'linux' or platform == 'linux2':
+            self.sep = '-'
             if not os.path.isfile(self._cli_path):
                 raise Exception('CLIPasswordSDK not found', 'Please make sure you provide a proper path to CLIPasswordSDK.')
         # Check for Windows OS
         elif platform == 'win32':
+            self.sep = '/'
             if not os.path.isfile(self._cli_path):
                 raise Exception('CLIPasswordSDK.exe not found', 'Please make sure you provide a proper path to CLIPasswordSDK.exe.')
         # Check for MacOS
@@ -37,31 +39,35 @@ class clipasswordsdk(object):
         elif obj is None:
             raise Exception('No Object Name', 'Please declare a valid Object name.')
         else:
-            response = None
-            while response is None:
+            success = False
+            retval = False
 
+            while (success == False):
                 response = Popen(
                     [
                         '{}'.format(self._cli_path),
                         'GetPassword',
-                        '-p', 'AppDescs.AppID={}'.format(appid),
-                        '-p', 'Query=safe={safe};folder=Root;object={obj}'.format(safe=safe,obj=obj),
-                        '-o', 'PassProps.UserName,Password,PassProps.Address,PassProps.Port,PasswordChangeInProcess'
+                        '{}p'.format(self.sep), 'AppDescs.AppID={}'.format(appid),
+                        '{}p'.format(self.sep), 'Query=safe={safe};folder=Root;object={obj}'.format(safe=safe,obj=obj),
+                        '{}o'.format(self.sep), 'PassProps.UserName,Password,PassProps.Address,PassProps.Port,PasswordChangeInProcess'
                     ],
                     stdout=PIPE
                 ).communicate()[0].strip()
 
                 if 'APPAP282E' in response.decode():
+                    success = False
                     time.sleep(3)
-                    response = ''
                 elif 'APPAP' in response.decode():
-                    raise Exception(response.decode())
+                    success = True
+                    retval = False
+                    raise Exception('Error Code', response.decode())
                 else:
-                    break
+                    success = True
+                    retval = True
 
-            key_list = ['Username','Password','Address','Port','PasswordChangeInProcess']
-            val_list = response.decode().split(',')
-            zip_list = zip(key_list,val_list)
-            ret_response = dict(zip_list)
-
-            return ret_response
+            if (success == True and retval == True):
+                key_list = ['Username','Password','Address','Port','PasswordChangeInProcess']
+                val_list = response.decode().split(',')
+                zip_list = zip(key_list,val_list)
+                ret_response = dict(zip_list)
+                return ret_response
