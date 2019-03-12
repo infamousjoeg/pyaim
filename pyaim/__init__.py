@@ -1,30 +1,23 @@
 import os
-import time
+#import time
+from subprocess import PIPE, Popen
 from sys import platform
 
-import pyaim.config as cfg
-from sarge import capture_stdout, shell_format
 
+class clipasswordsdk(object):
 
-class clipasswordsdk:
+    def __init__(self, cli_path):
 
-    def __init__(self):
+        self._cli_path = cli_path
 
-        wincli = cfg.BaseConfig.WIN_CLIPASSWORDSDK
-        nixcli = cfg.BaseConfig.NIX_CLIPASSWORDSDK
-        
         # Check for Linux OS
         if platform == 'linux' or platform == 'linux2':
-            if os.path.isfile(nixcli):
-                self.cli = nixcli
-            else:
-                raise Exception('CLIPasswordSDK not found in default location', 'Please update NIX_CLIPASSWORDSDK value in pyaim/config.py.')
+            if not os.path.isfile(self._cli_path):
+                raise Exception('CLIPasswordSDK not found', 'Please make sure you provide a proper path to CLIPasswordSDK.')
         # Check for Windows OS
         elif platform == 'win32':
-            if os.path.isfile(wincli):
-                self.cli = wincli
-            else:
-                raise Exception('CLIPasswordSDK.exe not found in default location', 'Please update WIN_CLIPASSWORDSDK value in pyaim/config.py.')
+            if not os.path.isfile(self._cli_path):
+                raise Exception('CLIPasswordSDK.exe not found', 'Please make sure you provide a proper path to CLIPasswordSDK.exe.')
         # Check for MacOS
         elif platform == 'darwin':
             raise Exception('Unsupported OS', 'Support only exists for Linux & Windows currently.')
@@ -33,31 +26,42 @@ class clipasswordsdk:
             raise Exception('Cannot detect OS', 'Your platform is unrecognizable. Please use Linux or Windows.')
 
 
-    @staticmethod
     def GetPassword(self, appid=None, safe=None, obj=None):
         # Check appid is declared
         if appid is None:
             raise Exception('No Application ID', 'Please declare a valid Application ID.')
+        # Check safe is declared
         elif safe is None:
             raise Exception('No Safe Name', 'Please declare a valid Safe name.')
+        # Check object name is declared
         elif obj is None:
             raise Exception('No Object Name', 'Please declare a valid Object name.')
         else:
             response = None
             while response is None:
-                response = capture_stdout(
-                    shell_format('{0} GetPassword -p AppDescs.AppID={1} -p Query="safe={2};Folder=Root;Object={3} -p Reason="Checked out using pyaim" -p FailRequestOnPasswordChange=true -o PassProps.Username, Password, PassProps.Address, PassProps.Port, PasswordChangeInProcess',
-                        self.cli,
-                        appid,
-                        safe,
-                        obj
-                    )
-                )
 
-                if 'APPAP282E' in response:
+                response = Popen(
+                    [
+                        '{}'.format(self._cli_path),
+                        'GetPassword',
+                        '-p', 'AppDescs.AppID={}'.format(appid),
+                        '-p', 'Query=safe={safe};folder=Root;object={obj}'.format(safe=safe,obj=obj),
+                        '-o', 'PassProps.UserName,Password,PassProps.Address,PassProps.Port,PasswordChangeInProcess'
+                    ],
+                    stdout=PIPE
+                ).communicate()[0].strip()
+
+                if 'APPAP282E' in response.decode():
                     time.sleep(3)
-                    response = None
+                    response = ''
+                elif 'APPAP' in response.decode():
+                    raise Exception(response.decode())
                 else:
                     break
 
-            return response
+            key_list = ['Username','Password','Address','Port','PasswordChangeInProcess']
+            val_list = response.decode().split(',')
+            zip_list = zip(key_list,val_list)
+            ret_response = dict(zip_list)
+
+            return ret_response
