@@ -39,10 +39,7 @@ class clipasswordsdk(object):
         elif obj is None:
             raise Exception('No Object Name', 'Please declare a valid Object name.')
         else:
-            success = False
-            retval = False
-
-            while (success == False):
+            try:
                 response = Popen(
                     [
                         '{}'.format(self._cli_path),
@@ -54,20 +51,12 @@ class clipasswordsdk(object):
                     stdout=PIPE
                 ).communicate()[0].strip()
 
-                if 'APPAP282E' in response.decode():
-                    success = False
-                    time.sleep(3)
-                elif 'APPAP' in response.decode():
-                    success = True
-                    retval = False
-                    raise Exception('Error Code', response.decode())
-                else:
-                    success = True
-                    retval = True
+            except:
+                raise Exception('Error Code', response.decode('UTF-8'))
 
-            if (success == True and retval == True):
+            else:
                 key_list = ['Username','Password','Address','Port','PasswordChangeInProcess']
-                val_list = response.decode().split(',')
+                val_list = response.decode('UTF-8').split(',')
                 zip_list = zip(key_list,val_list)
                 ret_response = dict(zip_list)
                 return ret_response

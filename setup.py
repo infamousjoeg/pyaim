@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pyaim",
-    version="0.0.29",
+    version="0.0.31",
     author="Joe Garcia",
     author_email="joe.garcia@cyberark.com",
     long_description=long_description,
