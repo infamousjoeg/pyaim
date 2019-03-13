@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: pyaim
+Version: 1.0.0
+Summary: UNKNOWN
+Home-page: https://github.com/infamousjoeg/pyaim
+Author: Joe Garcia
+Author-email: joe.garcia@cyberark.com
+License: MIT
+Project-URL: Bug Reports, https://github.com/infamousjoeg/pyaim/issues/new?assignees=&labels=&template=bug_report.md&title=
+Project-URL: Feature Requests, https://github.com/infamousjoeg/pyaim/issues/new?assignees=&labels=&template=feature_request.md&title=
+Project-URL: Source, https://github.com/infamousjoeg/pyaim
+Description: # pyAIM
+        
+        Python 3 Client Library for CyberArk Application Access Manager
+        
+Keywords: cyberark aim aam identity access security pam pim pas
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown

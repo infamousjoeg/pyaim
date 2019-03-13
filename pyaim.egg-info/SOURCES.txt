@@ -1,0 +1,7 @@
+README.md
+setup.py
+pyaim/__init__.py
+pyaim.egg-info/PKG-INFO
+pyaim.egg-info/SOURCES.txt
+pyaim.egg-info/dependency_links.txt
+pyaim.egg-info/top_level.txt

@@ -40,7 +40,7 @@ class clipasswordsdk(object):
             raise Exception('No Object Name', 'Please declare a valid Object name.')
         else:
             try:
-                response = Popen(
+                response, err = Popen(
                     [
                         '{}'.format(self._cli_path),
                         'GetPassword',
@@ -48,15 +48,18 @@ class clipasswordsdk(object):
                         '{}p'.format(self.sep), 'Query=safe={safe};folder=Root;object={obj}'.format(safe=safe,obj=obj),
                         '{}o'.format(self.sep), 'PassProps.UserName,Password,PassProps.Address,PassProps.Port,PasswordChangeInProcess'
                     ],
-                    stdout=PIPE
-                ).communicate()[0].strip()
+                    stdout=PIPE,
+                    stderr=PIPE
+                ).communicate()
 
+                if err:
+                    raise Exception(err.decode('UTF-8').strip())
             except:
-                raise Exception('Error Code', response.decode('UTF-8'))
-
+                print(err.decode('UTF-8').strip())
+                exit()
             else:
                 key_list = ['Username','Password','Address','Port','PasswordChangeInProcess']
-                val_list = response.decode('UTF-8').split(',')
+                val_list = response.decode('UTF-8').strip().split(',')
                 zip_list = zip(key_list,val_list)
                 ret_response = dict(zip_list)
                 return ret_response
