@@ -11,7 +11,7 @@ CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 VERSION_FILE = os.path.join(CURRENT_DIR, PACKAGE_NAME, "version.py")
 
 VERSION_DATA = {}
-with open("version.py", "r") as version_fp:
+with open(VERSION_FILE, "r") as version_fp:
     exec(version_fp.read(), VERSION_DATA)
 
 setuptools.setup(
