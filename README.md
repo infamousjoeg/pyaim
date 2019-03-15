@@ -9,6 +9,7 @@ This project simplifies the interaction between a Python 3 application or script
 ## Table of Contents <!-- OMIT IN TOC -->
 
 - [Install](#install)
+  - [Pre-Requisite](#pre-requisite)
   - [Windows](#windows)
   - [Linux](#linux)
     - [Ubuntu/Debian](#ubuntudebian)
@@ -22,6 +23,8 @@ This project simplifies the interaction between a Python 3 application or script
       - [Install pyAIM via Pip](#install-pyaim-via-pip-1)
   - [MacOS](#macos)
   - [Z/OS](#zos)
+    - [Install Latest Python 3](#install-latest-python-3-2)
+    - [Install pyAIM via Pip](#install-pyaim-via-pip-2)
 - [Usage](#usage)
   - [Retrieve Account](#retrieve-account)
     - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method)
@@ -30,6 +33,12 @@ This project simplifies the interaction between a Python 3 application or script
 - [License](#license)
 
 ## Install
+
+### Pre-Requisite
+
+* CyberArk Application Access Manager Credential Provider installed locally.
+
+For information on how to install, please refer to CyberArk's Application Access Manager Installation Guide.
 
 ### Windows
 
@@ -79,7 +88,15 @@ No support provided yet.
 
 ### Z/OS
 
-No support provided yet.
+pyAIM is untested on Z/OS but should work in theory.
+
+#### Install Latest Python 3
+
+Rocket Software has [ported Python 2 and 3](https://www.rocketsoftware.com/zos-open-source) for Z/OS
+
+#### Install pyAIM via Pip
+
+`pip install pyaim`
 
 ## Usage
 
