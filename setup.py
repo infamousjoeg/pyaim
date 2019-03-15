@@ -19,7 +19,7 @@ setuptools.setup(
     version=VERSION_DATA['__version__'],
     author="Joe Garcia",
     author_email="joe.garcia@cyberark.com",
-    description="CyberArk Application Access Manager Client Library for Python 3"
+    description="CyberArk Application Access Manager Client Library for Python 3",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/infamousjoeg/pyaim",
