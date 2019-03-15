@@ -1,2 +1,4 @@
-.vscode/*
-build/*
+.vscode/
+build/
+dist/
+*.egg-info/
