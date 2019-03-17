@@ -1,7 +1,6 @@
 import os
-from sys import platform
-
-import requests
+import http.client
+import sys.platforms
 
 
 class CCPPasswordREST(object):
@@ -21,7 +20,24 @@ class CCPPasswordREST(object):
                 raise Exception('No {}'.format(var), 'Please declare a valid {}.'.format(var))
 
         try:
-            # Send the request to AIM CCP and receive JSON response
+            import http.client
+
+conn = http.client.HTTPConnection("components,cyberarkdemo,example")
+
+payload = ""
+
+headers = {
+    'Content-Type': "application/json",
+    'cache-control': "no-cache",
+    'Postman-Token': "1a38e59a-7a1a-4c3d-849b-7f42055d6ab7"
+    }
+
+conn.request("GET", "AIMWebService,api,Accounts", payload, headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
         except e as Exception:
             print(e)
             exit()

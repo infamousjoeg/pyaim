@@ -7,7 +7,6 @@ verify_ssl = true
 twine = "*"
 
 [packages]
-requests = "*"
 
 [requires]
 python_version = "3.7"
