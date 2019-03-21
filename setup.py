@@ -6,7 +6,7 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-PACKAGE_NAME = "pyAIM"
+PACKAGE_NAME = "pyaim"
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 VERSION_FILE = os.path.join(CURRENT_DIR, PACKAGE_NAME, "version.py")
 
