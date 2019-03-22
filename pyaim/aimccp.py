@@ -27,7 +27,7 @@ class CCPPasswordREST(object):
             status_code = conn.getcode()
             conn.close()
         except Exception as e:
-            return 'AIMWebService Not Found. Status Code: {}'.format(e.getcode())
+            return 'AIMWebService Not Found. Exception: '.format(e)
             exit()
 
         return 'AIMWebService Found. Status Code: {}'.format(status_code)
