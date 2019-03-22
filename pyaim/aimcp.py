@@ -48,7 +48,7 @@ class CLIPasswordSDK(object):
 
             if err:
                 raise Exception(err.decode('UTF-8').strip())
-        except e as Exception:
+        except Exception as e:
             print(e)
             exit()
             
