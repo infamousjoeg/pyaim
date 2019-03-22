@@ -26,7 +26,7 @@ class CCPPasswordREST(object):
             conn = urllib.request.urlopen(self._base_uri + '/AIMWebService/v1.1/aim.asmx', context=self._context)
             status_code = conn.getcode()
             conn.close()
-        except urllib.HTTPError as e:
+        except Exception as e:
             return 'AIMWebService Not Found. Status Code: {}'.format(e.getcode())
             exit()
 
