@@ -18,7 +18,7 @@ class CCPPasswordREST(object):
             self._context = ssl.create_default_context()
             self._context.check_hostname = False
             self._context.context.verify_mode = ssl.CERT_NONE
-        else
+        else:
             self._context = ssl.create_default_context()
 
 
