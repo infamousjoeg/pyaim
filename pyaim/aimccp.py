@@ -1,7 +1,5 @@
 import json
-import os
 import ssl
-import sys.platforms
 import urllib.parse
 import urllib.request
 
