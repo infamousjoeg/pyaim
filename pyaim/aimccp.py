@@ -40,10 +40,10 @@ class CCPPasswordREST(object):
     # Retrieve Account Object Properties using AIM Web Service
     def GetPassword(self, appid=None, safe=None, objectName=None):
         # Check for unassigned variable
-        var_list = [appid, safe, objectName]
-        for var in var_list:
+        var_checklist = [appid, safe, objectName]
+        for var in var_checklist:
             if var is None:
-                raise Exception('No {}'.format(var), 'Please declare a valid {}.'.format(var))
+                raise Exception('No {}. Please declare a valid {}.'.format(var,var))
 
         # Urlify parameters for GET Request
         params = urllib.parse.urlencode({'appid': appid, 'folder': 'root', 'safe': safe, 'object': objectName})

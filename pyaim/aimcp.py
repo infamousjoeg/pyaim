@@ -28,10 +28,10 @@ class CLIPasswordSDK(object):
 
 
     def GetPassword(self, appid=None, safe=None, objectName=None):
-        var_list = [appid, safe, objectName]
-        for var in var_list:
+        var_checklist = [appid, safe, objectName]
+        for var in var_checklist:
             if var is None:
-                raise Exception('No {}'.format(var), 'Please declare a valid {}.'.format(var))
+                raise Exception('No {}. Please declare a valid {}.'.format(var,var))
 
         try:
             response, err = Popen(
