@@ -33,9 +33,11 @@ Now you can also use this with CyberArk's Application Access Manager Centralized
     - [Install Latest Python 3](#install-latest-python-3-3)
     - [Install pyAIM via Pip](#install-pyaim-via-pip-3)
 - [Usage](#usage)
-  - [Retrieve Account](#retrieve-account)
-    - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method-1)
+  - [Check AIMWebService Availability - check_service()](#check-aimwebservice-availability---checkservice)
     - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-1)
+  - [Retrieve Account - GetPassword()](#retrieve-account---getpassword)
+    - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method-1)
+    - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-2)
 - [Maintainer](#maintainer)
 - [Contributing](#contributing)
 - [License](#license)
@@ -120,7 +122,19 @@ Rocket Software has [ported Python 2 and 3](https://www.rocketsoftware.com/zos-o
 
 ## Usage
 
-### Retrieve Account
+### Check AIMWebService Availability - check_service()
+
+#### Centralized Credential Provider (CCPPasswordREST) Method
+
+```python
+from pyaim import CCPPasswordSDK
+
+aimccp = CCPPasswordSDK('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
+service_status = aimccp.check_service()
+print(service_status)
+```
+
+### Retrieve Account - GetPassword()
 
 #### Credential Provider (CLIPasswordSDK) Method
 
