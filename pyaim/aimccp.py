@@ -27,10 +27,10 @@ class CCPPasswordREST(object):
             status_code = conn.getcode()
             conn.close()
         except urllib.HTTPError as e:
-            print('AIMWebService Not Found. Status Code: {}'.format(e.getcode()))
+            return 'AIMWebService Not Found. Status Code: {}'.format(e.getcode())
             exit()
 
-        print('AIMWebService Found. Status Code: {}'.format(status_code))
+        return 'AIMWebService Found. Status Code: {}'.format(status_code)
 
     # Retrieve Account Object Properties using AIM Web Service
     def GetPassword(self, appid=None, safe=None, objectName=None):
@@ -46,13 +46,13 @@ class CCPPasswordREST(object):
             # Build Header for GET Request
             headers = {'Content-Type': 'application/json'}
             # Build URL for GET Request
-            url = self._base_uri + '/AIMWebService/api/Accounts{}'.format(params)
+            url = self._base_uri + '/AIMWebService/api/Accounts?{}'.format(params)
             request = urllib.request.Request(url, headers=headers)
             response = urllib.request.urlopen(request, context=self._context)
             resp_data = response.read()
 
         # Capture Any Exceptions that Occur
-        except e as Exception:
+        except Exception as e:
             # Print Exception Details and Exit
             print(e)
             exit()
