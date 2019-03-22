@@ -54,7 +54,7 @@ class CCPPasswordREST(object):
         # Capture Any Exceptions that Occur
         except Exception as e:
             # Print Exception Details and Exit
-            print(e)
+            return(e)
             exit()
         
         # Deal with Python dict for return variable

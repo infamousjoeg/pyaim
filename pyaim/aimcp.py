@@ -49,7 +49,7 @@ class CLIPasswordSDK(object):
             if err:
                 raise Exception(err.decode('UTF-8').strip())
         except Exception as e:
-            print(e)
+            return(e)
             exit()
             
         key_list = ['Username','Password','Address','Port','PasswordChangeInProcess']
