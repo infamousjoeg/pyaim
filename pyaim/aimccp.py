@@ -1,50 +1,65 @@
+import json
 import os
-import http.client
+import ssl
 import sys.platforms
+import urllib.parse
+import urllib.request
 
 
 class CCPPasswordREST(object):
 
-    def __init__(self, base_uri):
+    # Runs on Initialization
+    def __init__(self, base_uri, verify=True):
 
-        self._base_uri = base_uri
+        # Declare Init Variables
+        self._base_uri = base_uri.rstrip('/')   # Example: https://pvwa.cyberarkexample.com
+        
+        if verify is False:
+            self._context = ssl.create_default_context()
+            self._context.check_hostname = False
+            self._context.context.verify_mode = ssl.CERT_NONE
+        else
+            self._context = ssl.create_default_context()
 
+
+    # Checks that the AIM Web Service is available
     def check_service(self):
+        try:
+            conn = urllib.request.urlopen(self._base_uri + '/AIMWebService/v1.1/aim.asmx', context=self._context)
+            status_code = conn.getcode()
+            conn.close()
+        except urllib.HTTPError, e:
+            print('AIMWebService Not Found. Status Code: {}'.format(e.getcode()))
+            exit()
 
-        # Check self._base_uri + "/AIMWebService/v1.1/aim.asmx" for 200 OK
+        print('AIMWebService Found. Status Code: {}'.format(status_code))
 
+    # Retrieve Account Object Properties using AIM Web Service
     def GetPassword(self, appid=None, safe=None, objectName=None):
+        # Check for unassigned variable
         var_list = [appid, safe, objectName]
         for var in var_list:
             if var is None:
                 raise Exception('No {}'.format(var), 'Please declare a valid {}.'.format(var))
 
         try:
-            import http.client
+            # Urlify parameters for GET Request
+            params = urllib.parse.urlencode({'appid': appid, 'folder': 'root', 'safe': safe, 'object': objectName})
+            # Build Header for GET Request
+            headers = {'Content-Type': 'application/json'}
+            # Build URL for GET Request
+            url = self._base_uri + '/AIMWebService/api/Accounts{}'.format(params)
+            request = urllib.request.Request(url, headers=headers)
+            response = urllib.request.urlopen(request, context=self._context)
+            resp_data = response.read()
 
-conn = http.client.HTTPConnection("components,cyberarkdemo,example")
-
-payload = ""
-
-headers = {
-    'Content-Type': "application/json",
-    'cache-control': "no-cache",
-    'Postman-Token': "1a38e59a-7a1a-4c3d-849b-7f42055d6ab7"
-    }
-
-conn.request("GET", "AIMWebService,api,Accounts", payload, headers)
-
-res = conn.getresponse()
-data = res.read()
-
-print(data.decode("utf-8"))
+        # Capture Any Exceptions that Occur
         except e as Exception:
+            # Print Exception Details and Exit
             print(e)
             exit()
         
         # Deal with Python dict for return variable
-        key_list = ['Username','Password','Address','Port','PasswordChangeInProcess']
-        val_list = response.decode('UTF-8').strip().split(',')
-        zip_list = zip(key_list,val_list)
-        ret_response = dict(zip_list)
+        ret_response = json.loads(resp_data.decode('UTF-8'))
+        # Return Proper Response
         return ret_response
