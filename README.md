@@ -129,9 +129,9 @@ Rocket Software has [ported Python 2 and 3](https://www.rocketsoftware.com/zos-o
 #### Centralized Credential Provider (CCPPasswordREST) Method
 
 ```python
-from pyaim import CCPPasswordSDK
+from pyaim import CCPPasswordREST
 
-aimccp = CCPPasswordSDK('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
 service_status = aimccp.check_service()
 print(service_status)
 ```
@@ -157,9 +157,9 @@ print('PasswordChangeInProcess: {}'.format(response['PasswordChangeInProcess']))
 #### Centralized Credential Provider (CCPPasswordREST) Method
 
 ```python
-from pyaim import CCPPasswordSDK
+from pyaim import CCPPasswordREST
 
-aimccp = CCPPasswordSDK('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
 
 service_status = aimccp.check_service()
 
