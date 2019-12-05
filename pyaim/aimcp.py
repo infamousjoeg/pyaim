@@ -24,7 +24,7 @@ class CLIPasswordSDK(object):
             raise Exception('Cannot detect OS', 'Your platform is unrecognizable. Please use Linux, MacOS or Windows.')
 
 
-    def GetPassword(self, appid=None, safe=None, folder=None, objectName=None, username=None, address=None, database=None, policyid=None, reason=None, queryformat=None, credfilepath=None, requiredprops=None, connport=None, sendhash=False):
+    def GetPassword(self, appid=None, safe=None, folder=None, objectName=None, username=None, address=None, database=None, policyid=None, reason=None, queryformat=None, credfilepath=None, requiredprops=None, connport=None, sendhash=False, output='Password'):
         var_dict = {
             'appid': appid,
             'reason': reason,
@@ -64,6 +64,8 @@ class CLIPasswordSDK(object):
         for key in var_query_filtered.keys():
             aim_query += '{}={};'.format(key, var_query_filtered[key])
         query.append(aim_query)
+        query.append(self.sep + 'p RequiredProps=*')
+        query.append(self.sep + 'o {}'.format(output))
 
         try:
             response, err = Popen(
@@ -77,8 +79,7 @@ class CLIPasswordSDK(object):
         except Exception as e:
             raise Exception(e)
 
-        print(response)
-        key_list = ['Username','Password','Address','Port','PasswordChangeInProcess']
+        key_list = output.split(',')
         val_list = response.decode('UTF-8').strip().split(',')
         zip_list = zip(key_list,val_list)
         ret_response = dict(zip_list)

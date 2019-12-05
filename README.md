@@ -149,14 +149,11 @@ print(service_status)
 from pyaim import CLIPasswordSDK
 
 aimcp = CLIPasswordSDK('/opt/CARKaim/sdk/clipasswordsdk')
-response = aimcp.GetPassword('appID','safeName','objectName')
+response = aimcp.GetPassword(appid='appID',safe='safeName',objectName='objectName',output='PassProps.Username,Password')
 
 print('Full Response: {}'.format(response))
-print('Username: {}'.format(response['Username']))
+print('Username: {}'.format(response['PassProps.Username']))
 print('Password: {}'.format(response['Password']))
-print('Address: {}'.format(response['Address']))
-print('Port: {}'.format(response['Port']))
-print('PasswordChangeInProcess: {}'.format(response['PasswordChangeInProcess']))
 ```
 
 #### Centralized Credential Provider (CCPPasswordREST) Method
