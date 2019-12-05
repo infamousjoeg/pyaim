@@ -59,7 +59,7 @@ class CLIPasswordSDK(object):
         query = []
         query.append(self._cli_path)
         query.append('GetPassword')
-        query.append(self.sep + 'p', 'AppDescs.AppID={}'.format(appid))
+        query.append(self.sep + 'p AppDescs.AppID={}'.format(appid))
         aim_query = 'Query='
         for key in var_query_filtered.keys():
             aim_query += '{}={};'.format(key, var_query_filtered[key])
