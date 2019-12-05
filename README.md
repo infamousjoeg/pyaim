@@ -8,14 +8,14 @@
 
 This project simplifies the interaction between a Python 3 application or script and CyberArk's Application Access Manager's Credential Provider using the appropriate CLIPasswordSDK executable for the Operating System being used.  By simplifying this process, developers are only required to change four (4) lines of code in their Python 3 applications and scripts to securely retrieve privileged secrets from CyberArk's Privileged Access Security (PAS) Core Solution as opposed to thirty or more (30+) without the use of this provided Client Library.
 
-### New in Version 1.1.0: <!-- OMIT IN TOC -->
+### New in Version 1.2.0: <!-- OMIT IN TOC -->
 
-Now you can also use this with CyberArk's Application Access Manager Centralized Credential Provider (CCP) using REST API calls.
+Added support for all possible parameters for both AAM Credential Provider (CLIPasswordSDK) and AAM Central Credential Provider (CCPPasswordREST).
 
 ## Table of Contents <!-- OMIT IN TOC -->
 
 - [pyAIM](#pyaim)
-    - [New in Version 1.1.0: ](#new-in-version-110)
+    - [New in Version 1.2.0: ](#new-in-version-120)
   - [Table of Contents ](#table-of-contents)
   - [Install](#install)
     - [Pre-Requisite](#pre-requisite)
@@ -42,9 +42,11 @@ Now you can also use this with CyberArk's Application Access Manager Centralized
       - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-1)
     - [Retrieve Account - GetPassword()](#retrieve-account---getpassword)
       - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method-1)
-      - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-2)
         - [Supported Parameters](#supported-parameters)
         - [Example](#example)
+      - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-2)
+        - [Supported Parameters](#supported-parameters-1)
+        - [Example](#example-1)
   - [Maintainer](#maintainer)
   - [Contributing](#contributing)
   - [License](#license)
@@ -144,6 +146,25 @@ print(service_status)
 ### Retrieve Account - GetPassword()
 
 #### Credential Provider (CLIPasswordSDK) Method
+
+##### Supported Parameters
+
+* appid _(required)_
+* safe _(required)_
+* folder _(default: root)_
+* object _(this or `username` required)_
+* username _(this or `object` required)_
+* address
+* database
+* policyid
+* reason
+* query_format _(default: 1)_
+* connport
+* sendhash _(default: False)_
+
+For compatibility with Dual Accounts where you are refercing a `VirtualUsername` - use the `username` parameter.
+
+##### Example
 
 ```python
 from pyaim import CLIPasswordSDK

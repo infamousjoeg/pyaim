@@ -1,46 +1,55 @@
 # pyAIM <!-- OMIT IN TOC -->
 
+![](assets/pyAIM-sm.png)
+
 ![GitHub last commit](https://img.shields.io/github/last-commit/infamousjoeg/pyaim.svg) [![GitHub issues](https://img.shields.io/github/issues/infamousjoeg/pyaim.svg?color=blue)](https://github.com/infamousjoeg/pyaim/issues) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyaim.svg) ![GitHub top language](https://img.shields.io/github/languages/top/infamousjoeg/pyaim.svg?color=yellow)  [![PyPI](https://img.shields.io/pypi/v/pyaim.svg)](https://pypi.org/project/pyaim) [![PyPI - Downloads](https://img.shields.io/pypi/dm/pyaim.svg?color=blue)](https://pypi.org/project/pyaim) [![Keybase PGP](https://img.shields.io/keybase/pgp/infamousjoeg.svg)](https://keybase.io/infamousjoeg) [![GitHub](https://img.shields.io/github/license/infamousjoeg/pyaim.svg?color=blue)](LICENSE)
 
 > CyberArk Application Access Manager Client Library for Python 3
 
 This project simplifies the interaction between a Python 3 application or script and CyberArk's Application Access Manager's Credential Provider using the appropriate CLIPasswordSDK executable for the Operating System being used.  By simplifying this process, developers are only required to change four (4) lines of code in their Python 3 applications and scripts to securely retrieve privileged secrets from CyberArk's Privileged Access Security (PAS) Core Solution as opposed to thirty or more (30+) without the use of this provided Client Library.
 
-### New in Version 1.1.0: <!-- OMIT IN TOC -->
+### New in Version 1.2.0: <!-- OMIT IN TOC -->
 
-Now you can also use this with CyberArk's Application Access Manager Centralized Credential Provider (CCP) using REST API calls.
+Added support for all possible parameters for both AAM Credential Provider (CLIPasswordSDK) and AAM Central Credential Provider (CCPPasswordREST).
 
 ## Table of Contents <!-- OMIT IN TOC -->
 
-- [Install](#install)
-  - [Pre-Requisite](#pre-requisite)
-    - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method)
-    - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method)
-  - [Windows](#windows)
-    - [Install Latest Python 3](#install-latest-python-3)
-    - [Install pyAIM via Pip](#install-pyaim-via-pip)
-  - [Linux](#linux)
-    - [Ubuntu/Debian](#ubuntudebian)
-      - [Install Latest Python 3](#install-latest-python-3-1)
-      - [Install pyAIM via Pip](#install-pyaim-via-pip-1)
-    - [RHEL/CentOS](#rhelcentos)
-      - [Install Latest Python 3](#install-latest-python-3-2)
-        - [RHEL](#rhel)
-        - [CentOS](#centos)
-      - [Install pyAIM via Pip](#install-pyaim-via-pip-2)
-  - [MacOS](#macos)
-  - [Z/OS](#zos)
-    - [Install Latest Python 3](#install-latest-python-3-3)
-    - [Install pyAIM via Pip](#install-pyaim-via-pip-3)
-- [Usage](#usage)
-  - [Check AIMWebService Availability - check_service()](#check-aimwebservice-availability---checkservice)
-    - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-1)
-  - [Retrieve Account - GetPassword()](#retrieve-account---getpassword)
-    - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method-1)
-    - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-2)
-- [Maintainer](#maintainer)
-- [Contributing](#contributing)
-- [License](#license)
+- [pyAIM](#pyaim)
+    - [New in Version 1.2.0: ](#new-in-version-120)
+  - [Table of Contents ](#table-of-contents)
+  - [Install](#install)
+    - [Pre-Requisite](#pre-requisite)
+      - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method)
+      - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method)
+    - [Windows](#windows)
+      - [Install Latest Python 3](#install-latest-python-3)
+      - [Install pyAIM via Pip](#install-pyaim-via-pip)
+    - [Linux](#linux)
+      - [Ubuntu/Debian](#ubuntudebian)
+        - [Install Latest Python 3](#install-latest-python-3-1)
+        - [Install pyAIM via Pip](#install-pyaim-via-pip-1)
+      - [RHEL/CentOS](#rhelcentos)
+        - [Install Latest Python 3](#install-latest-python-3-2)
+          - [RHEL](#rhel)
+          - [CentOS](#centos)
+        - [Install pyAIM via Pip](#install-pyaim-via-pip-2)
+    - [MacOS](#macos)
+    - [Z/OS](#zos)
+      - [Install Latest Python 3](#install-latest-python-3-3)
+      - [Install pyAIM via Pip](#install-pyaim-via-pip-3)
+  - [Usage](#usage)
+    - [Check AIMWebService Availability - check_service()](#check-aimwebservice-availability---check_service)
+      - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-1)
+    - [Retrieve Account - GetPassword()](#retrieve-account---getpassword)
+      - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method-1)
+        - [Supported Parameters](#supported-parameters)
+        - [Example](#example)
+      - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-2)
+        - [Supported Parameters](#supported-parameters-1)
+        - [Example](#example-1)
+  - [Maintainer](#maintainer)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Install
 
@@ -127,9 +136,9 @@ Rocket Software has [ported Python 2 and 3](https://www.rocketsoftware.com/zos-o
 #### Centralized Credential Provider (CCPPasswordREST) Method
 
 ```python
-from pyaim import CCPPasswordSDK
+from pyaim import CCPPasswordREST
 
-aimccp = CCPPasswordSDK('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
 service_status = aimccp.check_service()
 print(service_status)
 ```
@@ -138,31 +147,64 @@ print(service_status)
 
 #### Credential Provider (CLIPasswordSDK) Method
 
+##### Supported Parameters
+
+* appid _(required)_
+* safe _(required)_
+* folder _(default: root)_
+* object _(this or `username` required)_
+* username _(this or `object` required)_
+* address
+* database
+* policyid
+* reason
+* query_format _(default: 1)_
+* connport
+* sendhash _(default: False)_
+
+For compatibility with Dual Accounts where you are refercing a `VirtualUsername` - use the `username` parameter.
+
+##### Example
+
 ```python
 from pyaim import CLIPasswordSDK
 
 aimcp = CLIPasswordSDK('/opt/CARKaim/sdk/clipasswordsdk')
-response = aimcp.GetPassword('appID','safeName','objectName')
+response = aimcp.GetPassword(appid='appID',safe='safeName',objectName='objectName',output='PassProps.Username,Password')
 
 print('Full Response: {}'.format(response))
-print('Username: {}'.format(response['Username']))
+print('Username: {}'.format(response['PassProps.Username']))
 print('Password: {}'.format(response['Password']))
-print('Address: {}'.format(response['Address']))
-print('Port: {}'.format(response['Port']))
-print('PasswordChangeInProcess: {}'.format(response['PasswordChangeInProcess']))
 ```
 
 #### Centralized Credential Provider (CCPPasswordREST) Method
 
-```python
-from pyaim import CCPPasswordSDK
+##### Supported Parameters
 
-aimccp = CCPPasswordSDK('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
+* appid _(required)_
+* safe _(required)_
+* folder _(default: root)_
+* object _(this or `username` required)_
+* username _(this or `object` required)_
+* address
+* database
+* policyid
+* reason
+* query_format _(default: exact)_
+
+For compatibility with Dual Accounts where you are refercing a `VirtualUsername` - use the `username` parameter.
+
+##### Example
+
+```python
+from pyaim import CCPPasswordREST
+
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
 
 service_status = aimccp.check_service()
 
-if service_status == 'AIMWebService Found. Status Code: 200':
-    response = aimccp.GetPassword('appid','safe','objectName')
+if service_status == 'SUCCESS: AIMWebService Found. Status Code: 200':
+    response = aimccp.GetPassword(appid='appid',safe='safe',object='objectName',reason='Reason message')
     print('Full Python Object: {}'.format(response))
     print('Username: {}'.format(response['Username']))
     print('Password: {}'.format(response['Content']))
