@@ -24,13 +24,11 @@ class CLIPasswordSDK(object):
             raise Exception('Cannot detect OS', 'Your platform is unrecognizable. Please use Linux, MacOS or Windows.')
 
 
-    def GetPassword(self, appid=None, safe=None, folder=None, objectName=None, username=None, address=None, database=None, policyid=None, reason=None, queryformat=None, credfilepath=None, requiredprops=None, connport=None, sendhash=False, output='Password'):
+    def GetPassword(self, appid=None, safe=None, folder=None, objectName=None, username=None, address=None, database=None, policyid=None, reason=None, queryformat=None, connport=None, sendhash=False, output='Password'):
         var_dict = {
             'appid': appid,
             'reason': reason,
             'queryformat': queryformat,
-            'credfilepath': credfilepath,
-            'requiredprops': requiredprops,
             'port': connport,
             'sendhash': sendhash
         }
@@ -60,7 +58,7 @@ class CLIPasswordSDK(object):
         query.append(self._cli_path)
         query.append('GetPassword')
         query.append(self.sep + 'p AppDescs.AppID={}'.format(appid))
-        aim_query = 'Query='
+        aim_query = self.sep + 'p Query='
         for key in var_query_filtered.keys():
             aim_query += '{}={};'.format(key, var_query_filtered[key])
         query.append(aim_query)
