@@ -1,5 +1,5 @@
 import os
-from subprocess import PIPE, Popen
+import subprocess
 from sys import platform
 
 
@@ -54,31 +54,21 @@ class CLIPasswordSDK(object):
         elif 'username' not in var_query_filtered and 'object' not in var_query_filtered:
             raise Exception('ERROR: either username or object requires a value.')
 
-        query = []
-        query.append(self._cli_path)
-        query.append('GetPassword')
-        query.append(self.sep + 'p AppDescs.AppID={}'.format(appid))
-        aim_query = self.sep + 'p Query='
+        aim_query 'Query='
         for key in var_query_filtered.keys():
             aim_query += '{}={};'.format(key, var_query_filtered[key])
-        query.append(aim_query)
-        query.append(self.sep + 'p RequiredProps=*')
-        query.append(self.sep + 'o {}'.format(output))
-
+        query = '{clipath} GetPassword {sep}p AppDescs.AppID={appid} {sep}p {query} {sep}p RequiredProps=* {sep}o {output}'.format(clipath=self._cli_path,sep=self.sep,appid=appid,query=aim_query,output=output)
+        
         try:
-            response, err = Popen(
-                query,
-                stdout=PIPE,
-                stderr=PIPE
-            ).communicate()
+            response = subprocess.run(query, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            if err:
-                raise Exception(err.decode('UTF-8').strip())
+            if (response.stderr).decode('UTF-8'):
+                raise Exception((response.stderr).decode('UTF-8').strip())
         except Exception as e:
             raise Exception(e)
 
         key_list = output.split(',')
-        val_list = response.decode('UTF-8').strip().split(',')
+        val_list = (response.stdout).decode('UTF-8').strip().split(',')
         zip_list = zip(key_list,val_list)
         ret_response = dict(zip_list)
         return ret_response
