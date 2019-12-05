@@ -28,7 +28,7 @@ class CLIPasswordSDK(object):
         var_dict = {
             'appid': appid,
             'reason': reason,
-            'queryformat': query_format,
+            'queryformat': queryformat,
             'credfilepath': credfilepath,
             'requiredprops': requiredprops,
             'port': connport,
