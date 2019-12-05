@@ -1,18 +1,7 @@
-import unittest
+#!/usr/bin/env python3
 
-import pyaim
+from pyaim import CLIPasswordSDK
 
-class TestCLIPasswordSDK(BaseTestCase):
-    def GetPassword(self):
-        appid = "pyaim-test"
-        safe = "TEST-RESTAPI"
-        obj = "TEST-RESTAPI-uadmin"
-
-        aimresp = pyaim.GetPassword(appid,safe,obj)
-
-        self.assertFalse('APPAP282E' is in aimresp)
-        self.assertTrue(aimresp is not None)
-
-
-if __name__ == "__main__":
-    unittest.main()
+aimcp = CLIPasswordSDK('/opt/CARKaim/sdk/clipasswordsdk')
+r = aimcp.GetPassword(appid='pyAIM', safe='D-AWS-AccessKeys', username='AnsibleAWSUser')
+print(r)
