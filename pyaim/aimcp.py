@@ -57,7 +57,7 @@ class CLIPasswordSDK(object):
         aim_query = 'Query="'
         for key in var_query_filtered.keys():
             aim_query += '{}={};'.format(key, var_query_filtered[key])
-        aim_query += '{}"'.format(aim_query.rstrip(';'))
+        aim_query += '{}"'.format(aim_query[:-1])
         query = '{clipath} GetPassword {sep}p AppDescs.AppID={appid} {sep}p {query} {sep}p RequiredProps=* {sep}o {output}'.format(clipath=self._cli_path,sep=self.sep,appid=appid,query=aim_query,output=output)
         
         try:
