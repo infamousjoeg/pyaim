@@ -54,14 +54,24 @@ class CLIPasswordSDK(object):
         elif 'username' not in var_query_filtered and 'object' not in var_query_filtered:
             raise Exception('ERROR: either username or object requires a value.')
 
-        aim_query = 'Query="'
         for key in var_query_filtered.keys():
             aim_query += '{}={};'.format(key, var_query_filtered[key])
-        aim_query += '{}"'.format(aim_query[:-1])
-        query = '{clipath} GetPassword {sep}p AppDescs.AppID={appid} {sep}p {query} {sep}p RequiredProps=* {sep}o {output}'.format(clipath=self._cli_path,sep=self.sep,appid=appid,query=aim_query,output=output)
+        aim_query += aim_query[:-1]
+        query = [
+            self._cli_path,
+            'GetPassword',
+            self.sep + 'p', 'AppDescs.AppID={}'.format(appid),
+            self.sep + 'p', 'Query={}'.format(aim_query)
+            self.sep + 'p', 'RequiredProps=*',
+            self.sep + 'o', output
+        ]
         
         try:
-            response, err = subprocess.Popen(query, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()
+            response, err = subprocess.Popen(
+                query,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            ).communicate()
 
             if (err):
                 raise Exception(err.decode('UTF-8').strip())
