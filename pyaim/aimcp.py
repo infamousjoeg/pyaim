@@ -57,7 +57,7 @@ class CLIPasswordSDK(object):
         aim_query = ''
         for key in var_query_filtered.keys():
             aim_query += '{}={};'.format(key, var_query_filtered[key])
-        aim_query += aim_query[:-1]
+        aim_query = aim_query[:-1]
         query = [
             self._cli_path,
             'GetPassword',
