@@ -61,7 +61,7 @@ class CLIPasswordSDK(object):
             self._cli_path,
             'GetPassword',
             self.sep + 'p', 'AppDescs.AppID={}'.format(appid),
-            self.sep + 'p', 'Query={}'.format(aim_query)
+            self.sep + 'p', 'Query={}'.format(aim_query),
             self.sep + 'p', 'RequiredProps=*',
             self.sep + 'o', output
         ]
