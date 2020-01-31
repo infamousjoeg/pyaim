@@ -16,7 +16,7 @@ class CCPPasswordREST(object):
         self._headers = {'Content-Type': 'application/json'} # Build Header for GET Request
 
         if verify is False:
-            self._context = ssl.create_unverified_context()
+            self._context = ssl._create_unverified_context()
 
 
     # Checks that the AIM Web Service is available
