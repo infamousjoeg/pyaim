@@ -216,6 +216,11 @@ else:
 
 [@infamousjoeg](https://github.com/infamousjoeg)
 
+[![Buy me a coffee][buymeacoffee-shield]][buymeacoffee]
+
+[buymeacoffee]: https://www.buymeacoffee.com/infamousjoeg
+[buymeacoffee-shield]: https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png
+
 ## Contributing
 
 For the time being, only internal CyberArk contributions are being considered.
