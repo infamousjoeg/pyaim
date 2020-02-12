@@ -8,6 +8,7 @@ twine = "*"
 
 [packages]
 urllib3 = "*"
+pyaim = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
