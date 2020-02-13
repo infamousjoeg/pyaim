@@ -40,20 +40,23 @@ class CCPPasswordREST(object):
         return 'SUCCESS: AIMWebService Found. Status Code: {}'.format(status_code)
 
     # Retrieve Account Object Properties using AIM Web Service
-    def GetPassword(self, appid=None, safe=None, folder=None, objectName=None, username=None, address=None, database=None, policyid=None, reason=None, query_format=None):
+    def GetPassword(self, appid=None, safe=None, folder=None, objectName=None, username=None, address=None, database=None, policyid=None, reason=None, query_format=None, dual_accounts=False):
+        # Check for username or virtual username (dual accounts)
+        if dual_accounts:
+            var_dict = {'query': 'VirtualUsername={}'.format(username)}
+        else:
+            var_dict = {'username': username}
+        
         # Create a dict of potential URL parameters for CCP
-        var_dict = {
-            'appid': appid,
-            'safe': safe,
-            'folder': folder,
-            'object': objectName,
-            'username': username,
-            'address': address,
-            'database': database,
-            'policyid': policyid,
-            'reason': reason,
-            'query_format': query_format
-        }
+        var_dict['appid'] = appid
+        var_dict['safe'] = safe
+        var_dict['folder'] = folder
+        var_dict['object'] = objectName
+        var_dict['address'] = address
+        var_dict['database'] = database
+        var_dict['policyid'] = policyid
+        var_dict['reason'] = reason
+        var_dict['query_format'] = query_format
         
         # Filter out None values from dict
         var_filtered = dict(filter(lambda x:x[1], var_dict.items()))
@@ -64,8 +67,9 @@ class CCPPasswordREST(object):
             raise Exception('ERROR: appid is a required parameter.')
         elif 'safe' not in var_filtered:
             raise Exception('ERROR: safe is a required parameter.')
-        elif 'username' not in var_filtered and 'object' not in var_filtered:
-            raise Exception('ERROR: either username or object requires a value.')
+        elif 'username' not in var_filtered and 'query' not in var_filtered and object not in var_filtered:
+            raise Exception('ERROR: either username or object requires a value or dual accounts should be true.')
+        
 
         # Urlify parameters for GET Request
         params = urllib.parse.urlencode(var_filtered)
