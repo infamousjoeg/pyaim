@@ -3,3 +3,4 @@ build/
 dist/
 *.egg-info/
 assets/*.psd
+*__pycache__*
