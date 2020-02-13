@@ -15,8 +15,8 @@ Added support for all possible parameters for both AAM Credential Provider (CLIP
 ## Table of Contents <!-- OMIT IN TOC -->
 
 - [pyAIM](#pyaim)
-    - [New in Version 1.2.0: ](#new-in-version-120)
-  - [Table of Contents ](#table-of-contents)
+    - [New in Version 1.2.0: <!-- OMIT IN TOC -->](#new-in-version-120)
+  - [Table of Contents <!-- OMIT IN TOC -->](#table-of-contents)
   - [Install](#install)
     - [Pre-Requisite](#pre-requisite)
       - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method)
@@ -161,8 +161,9 @@ print(service_status)
 * query_format _(default: 1)_
 * connport
 * sendhash _(default: False)_
+* dual_accounts _(default: False)_
 
-For compatibility with Dual Accounts where you are refercing a `VirtualUsername` - use the `username` parameter.
+For compatibility with Dual Accounts where you are referencing a `VirtualUsername` - use the `username` parameter and ensure `dual_accounts=True`.
 
 ##### Example
 
@@ -191,8 +192,9 @@ print('Password: {}'.format(response['Password']))
 * policyid
 * reason
 * query_format _(default: exact)_
+* dual_accounts _(default: False)_
 
-For compatibility with Dual Accounts where you are refercing a `VirtualUsername` - use the `username` parameter.
+For compatibility with Dual Accounts where you are referencing a `VirtualUsername` - use the `username` parameter and ensure `dual_accounts=True`.
 
 ##### Example
 
