@@ -24,7 +24,7 @@ class CLIPasswordSDK(object):
             raise Exception('Cannot detect OS', 'Your platform is unrecognizable. Please use Linux, MacOS or Windows.')
 
 
-    def GetPassword(self, appid=None, safe=None, folder=None, objectName=None, username=None, address=None, database=None, policyid=None, reason=None, queryformat=None, connport=None, sendhash=False, output='Password'):
+    def GetPassword(self, appid=None, safe=None, folder=None, objectName=None, username=None, address=None, database=None, policyid=None, reason=None, queryformat=None, connport=None, sendhash=False, output='Password', dual_accounts=False):
         var_dict = {
             'appid': appid,
             'reason': reason,
@@ -32,16 +32,21 @@ class CLIPasswordSDK(object):
             'port': connport,
             'sendhash': sendhash
         }
-        var_query = {
-            'safe': safe,
-            'folder': folder,
-            'object': objectName,
-            'username': username,
-            'address': address,
-            'database': database,
-            'policyid': policyid,
-        }
+        # If dual_accounts is True, then set VirtualUsername
+        # instead of a normal username property
+        if dual_accounts:
+            var_query = {'virtualusername': username}
+        else:
+            var_query = {'username': username}
 
+        var_query['safe'] = safe
+        var_query['folder'] = folder
+        var_query['object'] = objectName
+        var_query['address'] = address
+        var_query['database'] = database
+        var_query['policyid'] = policyid
+
+        # Filter out None values from dicts
         var_filtered = dict(filter(lambda x:x[1], var_dict.items()))
         var_query_filtered = dict(filter(lambda x:x[1], var_query.items()))
 
@@ -51,8 +56,8 @@ class CLIPasswordSDK(object):
             raise Exception('ERROR: appid is a required parameter.')
         elif 'safe' not in var_query_filtered:
             raise Exception('ERROR: safe is a required parameter.')
-        elif 'username' not in var_query_filtered and 'object' not in var_query_filtered:
-            raise Exception('ERROR: either username or object requires a value.')
+        elif 'username' not in var_query_filtered and 'virtualusername' not in var_query_filtered and 'object' not in var_query_filtered:
+            raise Exception('ERROR: either username or object requires a value or dual accounts should be true.')
 
         aim_query = ''
         for key in var_query_filtered.keys():
