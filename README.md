@@ -171,7 +171,7 @@ For compatibility with Dual Accounts where you are referencing a `VirtualUsernam
 from pyaim import CLIPasswordSDK
 
 aimcp = CLIPasswordSDK('/opt/CARKaim/sdk/clipasswordsdk')
-response = aimcp.GetPassword(appid='appID',safe='safeName',objectName='objectName',output='PassProps.Username,Password')
+response = aimcp.GetPassword(appid='appID',safe='safeName',object='objectName',output='PassProps.Username,Password')
 
 print('Full Response: {}'.format(response))
 print('Username: {}'.format(response['PassProps.Username']))
