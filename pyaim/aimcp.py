@@ -87,7 +87,7 @@ class CLIPasswordSDK(object):
             exit()
 
         key_list = output.split(',')
-        val_list = response.decode('UTF-8').strip().split(',')
+        val_list = response.decode('UTF-8').strip().split(',',1)
         zip_list = zip(key_list,val_list)
         ret_response = dict(zip_list)
         return ret_response
