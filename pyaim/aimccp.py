@@ -17,6 +17,7 @@ class CCPPasswordREST(object):
 
         if verify is False:
             self._context = ssl._create_unverified_context()
+            self._context.check_hostname = True
 
 
     # Checks that the AIM Web Service is available
