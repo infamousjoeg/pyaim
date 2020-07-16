@@ -15,8 +15,8 @@ Added support for all possible parameters for both AAM Credential Provider (CLIP
 ## Table of Contents <!-- OMIT IN TOC -->
 
 - [pyAIM](#pyaim)
-    - [New in Version 1.2.0: <!-- OMIT IN TOC -->](#new-in-version-120)
-  - [Table of Contents <!-- OMIT IN TOC -->](#table-of-contents)
+    - [New in Version 1.2.0:](#new-in-version-120)
+  - [Table of Contents](#table-of-contents)
   - [Install](#install)
     - [Pre-Requisite](#pre-requisite)
       - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method)
@@ -54,6 +54,9 @@ Added support for all possible parameters for both AAM Credential Provider (CLIP
 ## Install
 
 ### Pre-Requisite
+
+* Add `,` to the `PasswordForbiddenChars` of the platform of accounts to be retrieved using this module.
+  * `,` is used as a delimiter between data returned in the response.
 
 #### Credential Provider (CLIPasswordSDK) Method
 
