@@ -1,2 +1,2 @@
 -i https://pypi.org/simple/
-urllib3==1.26.2
+urllib3==1.26.4
