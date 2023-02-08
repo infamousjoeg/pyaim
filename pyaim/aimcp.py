@@ -69,7 +69,8 @@ class CLIPasswordSDK(object):
             self.sep + 'p', 'AppDescs.AppID={}'.format(appid),
             self.sep + 'p', 'Query={}'.format(aim_query),
             self.sep + 'p', 'RequiredProps=*',
-            self.sep + 'o', output
+            self.sep + 'o', output,
+            self.sep + 'd', ';;;;;'
         ]
         
         try:
@@ -87,7 +88,7 @@ class CLIPasswordSDK(object):
             exit()
 
         key_list = output.split(',')
-        val_list = response.decode('UTF-8').strip().split(',')
+        val_list = response.decode('UTF-8').strip().split(';;;;;')
         zip_list = zip(key_list,val_list)
         ret_response = dict(zip_list)
         return ret_response
