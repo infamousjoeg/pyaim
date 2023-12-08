@@ -1,3 +1,4 @@
+"""Test the CCPPasswordREST class"""
 #!/usr/bin/env python3
 
 from pyaim import CCPPasswordREST
