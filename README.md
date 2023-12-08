@@ -14,11 +14,10 @@ Added support for all possible parameters for both AAM Credential Provider (CLIP
 
 ## Table of Contents <!-- OMIT IN TOC -->
 
-- [pyAIM](#pyaim)
-    - [New in Version 1.2.0:](#new-in-version-120)
-  - [Table of Contents](#table-of-contents)
+- [pyAIM ](#pyaim-)
+    - [New in Version 1.2.0: ](#new-in-version-120-)
+  - [Table of Contents ](#table-of-contents-)
   - [Install](#install)
-    - [Pre-Requisite](#pre-requisite)
       - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method)
       - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method)
     - [Windows](#windows)
@@ -38,7 +37,7 @@ Added support for all possible parameters for both AAM Credential Provider (CLIP
       - [Install Latest Python 3](#install-latest-python-3-3)
       - [Install pyAIM via Pip](#install-pyaim-via-pip-3)
   - [Usage](#usage)
-    - [Check AIMWebService Availability - check_service()](#check-aimwebservice-availability---check_service)
+    - [Check AIMWebService Availability - check\_service()](#check-aimwebservice-availability---check_service)
       - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-1)
     - [Retrieve Account - GetPassword()](#retrieve-account---getpassword)
       - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method-1)
@@ -52,11 +51,6 @@ Added support for all possible parameters for both AAM Credential Provider (CLIP
   - [License](#license)
 
 ## Install
-
-### Pre-Requisite
-
-* Add `,` to the `PasswordForbiddenChars` of the platform of accounts to be retrieved using this module.
-  * `,` is used as a delimiter between data returned in the response.
 
 #### Credential Provider (CLIPasswordSDK) Method
 
@@ -164,6 +158,8 @@ print(service_status)
 * query_format _(default: 1)_
 * connport
 * sendhash _(default: False)_
+* output _(default: Password)_
+* delimiter _(default: ,)_
 * dual_accounts _(default: False)_
 
 For compatibility with Dual Accounts where you are referencing a `VirtualUsername` - use the `username` parameter and ensure `dual_accounts=True`.
