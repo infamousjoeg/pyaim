@@ -1,6 +1,5 @@
 import http.client
 import json
-import mimetypes
 import ssl
 import urllib.parse
 
@@ -8,16 +7,21 @@ import urllib.parse
 class CCPPasswordREST(object):
 
     # Runs on Initialization
-    def __init__(self, base_uri, verify=True):
+    def __init__(self, base_uri, verify=True, cert=None):
 
         # Declare Init Variables
         self._base_uri = base_uri.rstrip('/').replace('https://','') # Example: https://pvwa.cyberarkexample.com
-        self._context = ssl.create_default_context()
         self._headers = {'Content-Type': 'application/json'} # Build Header for GET Request
 
-        if verify is False:
+        if verify:
+            self._context = ssl._create_default_context()
+        else:
             self._context = ssl._create_unverified_context()
-            self._context.check_hostname = True
+            self._context.check_hostname = False
+        
+        # Client Certificate Authentication
+        if cert:
+            self._context.load_cert_chain(certfile=cert[0], keyfile=cert[1])
 
 
     # Checks that the AIM Web Service is available
