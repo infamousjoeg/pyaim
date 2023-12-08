@@ -10,6 +10,7 @@ This project simplifies the interaction between a Python 3 application or script
 
 ### New in Version 1.5.0: <!-- omit from toc -->
 
+- Added support for `timeout` when intializing the CCPPasswordREST() class.
 - Added support for `delimiter` parameter in `GetPassword()` method for Credential Provider (CLIPasswordSDK) method.
 - Added support for Client Certificate Authentication in `GetPassword()` method for Centralized Credential Provider (CCPPasswordREST) method.
 
