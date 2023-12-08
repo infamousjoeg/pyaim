@@ -14,11 +14,10 @@ Added support for all possible parameters for both AAM Credential Provider (CLIP
 
 ## Table of Contents <!-- OMIT IN TOC -->
 
-- [pyAIM](#pyaim)
-    - [New in Version 1.2.0: ](#new-in-version-120)
-  - [Table of Contents ](#table-of-contents)
+- [pyAIM ](#pyaim-)
+    - [New in Version 1.2.0: ](#new-in-version-120-)
+  - [Table of Contents ](#table-of-contents-)
   - [Install](#install)
-    - [Pre-Requisite](#pre-requisite)
       - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method)
       - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method)
     - [Windows](#windows)
@@ -38,7 +37,7 @@ Added support for all possible parameters for both AAM Credential Provider (CLIP
       - [Install Latest Python 3](#install-latest-python-3-3)
       - [Install pyAIM via Pip](#install-pyaim-via-pip-3)
   - [Usage](#usage)
-    - [Check AIMWebService Availability - check_service()](#check-aimwebservice-availability---check_service)
+    - [Check AIMWebService Availability - check\_service()](#check-aimwebservice-availability---check_service)
       - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-1)
     - [Retrieve Account - GetPassword()](#retrieve-account---getpassword)
       - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method-1)
@@ -52,8 +51,6 @@ Added support for all possible parameters for both AAM Credential Provider (CLIP
   - [License](#license)
 
 ## Install
-
-### Pre-Requisite
 
 #### Credential Provider (CLIPasswordSDK) Method
 
@@ -161,8 +158,11 @@ print(service_status)
 * query_format _(default: 1)_
 * connport
 * sendhash _(default: False)_
+* output _(default: Password)_
+* delimiter _(default: ,)_
+* dual_accounts _(default: False)_
 
-For compatibility with Dual Accounts where you are refercing a `VirtualUsername` - use the `username` parameter.
+For compatibility with Dual Accounts where you are referencing a `VirtualUsername` - use the `username` parameter and ensure `dual_accounts=True`.
 
 ##### Example
 
@@ -170,7 +170,7 @@ For compatibility with Dual Accounts where you are refercing a `VirtualUsername`
 from pyaim import CLIPasswordSDK
 
 aimcp = CLIPasswordSDK('/opt/CARKaim/sdk/clipasswordsdk')
-response = aimcp.GetPassword(appid='appID',safe='safeName',objectName='objectName',output='PassProps.Username,Password')
+response = aimcp.GetPassword(appid='appID',safe='safeName',object='objectName',output='PassProps.Username,Password')
 
 print('Full Response: {}'.format(response))
 print('Username: {}'.format(response['PassProps.Username']))
@@ -191,8 +191,9 @@ print('Password: {}'.format(response['Password']))
 * policyid
 * reason
 * query_format _(default: exact)_
+* dual_accounts _(default: False)_
 
-For compatibility with Dual Accounts where you are refercing a `VirtualUsername` - use the `username` parameter.
+For compatibility with Dual Accounts where you are referencing a `VirtualUsername` - use the `username` parameter and ensure `dual_accounts=True`.
 
 ##### Example
 
@@ -216,14 +217,15 @@ else:
 
 [@infamousjoeg](https://github.com/infamousjoeg)
 
+[![Buy me a coffee][buymeacoffee-shield]][buymeacoffee]
+
+[buymeacoffee]: https://www.buymeacoffee.com/infamousjoeg
+[buymeacoffee-shield]: https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png
+
 ## Contributing
 
-For the time being, only internal CyberArk contributions are being considered.
-
-Feel free to report any feature requests or bugs on the [GitHub Issues](https://github.com/infamousjoeg/pyaim/issues) page.
-
-Keep checking back for an update regarding open Contributions in the near future.
+Contributions are open!  Check out [CONTRIBUTING.md]() for more details!
 
 ## License
 
-[MIT](LICENSE) © Joe Garcia, CISSP
+[MIT](LICENSE)
