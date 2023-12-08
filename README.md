@@ -224,12 +224,8 @@ else:
 
 ## Contributing
 
-For the time being, only internal CyberArk contributions are being considered.
-
-Feel free to report any feature requests or bugs on the [GitHub Issues](https://github.com/infamousjoeg/pyaim/issues) page.
-
-Keep checking back for an update regarding open Contributions in the near future.
+Contributions are open!  Check out [CONTRIBUTING.md]() for more details!
 
 ## License
 
-[MIT](LICENSE) © Joe Garcia, CISSP
+[MIT](LICENSE)
