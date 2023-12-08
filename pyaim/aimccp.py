@@ -7,18 +7,18 @@ import urllib.parse
 class CCPPasswordREST:
     """Class for interacting with CyberArk's CCP REST API."""
 
-    def __init__(self, base_uri, verify=True):
+    def __init__(self, base_uri, verify=True, cert=None):
 
         # Declare Init Variables
-        self._base_uri = base_uri.rstrip('/').replace('https://','') # Example: https://pvwa.cyberarkexample.com
-        self._headers = {'Content-Type': 'application/json'} # Build Header for GET Request
+        self._base_uri = base_uri.rstrip('/').replace('https://','')
+        self._headers = {'Content-Type': 'application/json'}
 
         if verify:
-            self._context = ssl._create_default_context()
+            self._context = ssl.create_default_context()
         else:
             self._context = ssl._create_unverified_context()
             self._context.check_hostname = False
-        
+
         # Client Certificate Authentication
         if cert:
             self._context.load_cert_chain(certfile=cert[0], keyfile=cert[1])
