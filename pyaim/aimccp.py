@@ -7,11 +7,12 @@ import urllib.parse
 class CCPPasswordREST:
     """Class for interacting with CyberArk's CCP REST API."""
 
-    def __init__(self, base_uri, verify=True, cert=None):
+    def __init__(self, base_uri, verify=True, cert=None, timeout=30):
 
         # Declare Init Variables
         self._base_uri = base_uri.rstrip('/').replace('https://','')
         self._headers = {'Content-Type': 'application/json'}
+        self._timeout = timeout
 
         if verify:
             self._context = ssl.create_default_context()
@@ -28,7 +29,8 @@ class CCPPasswordREST:
         """Checks that the AIM Web Service is available."""
         try:
             url = '/AIMWebService/v1.1/aim.asmx'
-            conn = http.client.HTTPSConnection(self._base_uri, context=self._context)
+            conn = http.client.HTTPSConnection(
+                self._base_uri, context=self._context, timeout=self._timeout)
             conn.request("GET", url, headers=self._headers)
             res = conn.getresponse()
             status_code = res.status
@@ -84,7 +86,8 @@ class CCPPasswordREST:
         url = f"/AIMWebService/api/Accounts?{params}"
 
         try:
-            conn = http.client.HTTPSConnection(self._base_uri, context=self._context)
+            conn = http.client.HTTPSConnection(
+                self._base_uri, context=self._context, timeout=self._timeout)
             conn.request("GET", url, headers=self._headers)
             res = conn.getresponse()
             data = res.read()

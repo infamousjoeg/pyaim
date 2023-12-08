@@ -40,9 +40,12 @@ This project simplifies the interaction between a Python 3 application or script
   - [Retrieve Account - GetPassword()](#retrieve-account---getpassword)
     - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method-1)
       - [Supported Parameters](#supported-parameters)
+        - [Query Parameters](#query-parameters)
       - [Example](#example)
     - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-2)
       - [Supported Parameters](#supported-parameters-1)
+        - [CCPPasswordREST()](#ccppasswordrest)
+        - [Query Parameters](#query-parameters-1)
       - [Example](#example-1)
       - [Example with Client Certificate Authentication](#example-with-client-certificate-authentication)
 - [Maintainer](#maintainer)
@@ -145,6 +148,8 @@ print(service_status)
 
 ##### Supported Parameters
 
+###### Query Parameters
+
 * appid _(required)_
 * safe _(required)_
 * folder _(default: root)_
@@ -180,6 +185,15 @@ print('Password: {}'.format(response['Password']))
 
 ##### Supported Parameters
 
+###### CCPPasswordREST()
+
+* url _(required)_
+* verify _(default: True)_
+* cert _(default: None)_
+* timeout _(default: 30)_
+
+###### Query Parameters
+
 * appid _(required)_
 * safe _(required)_
 * folder _(default: root)_
@@ -199,7 +213,7 @@ For compatibility with Dual Accounts where you are referencing a `VirtualUsernam
 ```python
 from pyaim import CCPPasswordREST
 
-aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True, timeout=10) # set verify=False to ignore SSL
 
 service_status = aimccp.check_service()
 
