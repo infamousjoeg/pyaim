@@ -4,7 +4,7 @@ import json
 import ssl
 import urllib.parse
 
-class CCPPasswordREST(object):
+class CCPPasswordREST:
     """Class for interacting with CyberArk's CCP REST API."""
 
     def __init__(self, base_uri, verify=True):
@@ -33,13 +33,13 @@ class CCPPasswordREST(object):
                 raise ConnectionError('ERROR: AIMWebService Not Found.')
 
         except Exception as e:
-            raise Exception(e) # pylint: disable=raise-missing-from
+            raise Exception(e) # pylint: disable=raise-missing-from,broad-exception-raised
 
         return f"SUCCESS: AIMWebService Found. Status Code: {status_code}"
 
-    def GetPassword(self, appid=None, safe=None, folder=None, object=None,
+    def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name
             username=None, address=None, database=None, policyid=None,
-            reason=None, query_format=None, dual_accounts=False): # pylint: disable=redefined-builtin,invalid-name
+            reason=None, query_format=None, dual_accounts=False): # pylint: disable=too-many-arguments,too-many-locals
         """Retrieve Account Object Properties using AIM Web Service."""
         # Check for username or virtual username (dual accounts)
         if dual_accounts:
@@ -65,9 +65,9 @@ class CCPPasswordREST(object):
         # Check that either object or username has a value (required)
         if 'appid' not in var_filtered:
             raise ValueError('ERROR: appid is a required parameter.')
-        elif 'safe' not in var_filtered:
+        if 'safe' not in var_filtered:
             raise ValueError('ERROR: safe is a required parameter.')
-        elif 'username' not in var_filtered \
+        if 'username' not in var_filtered \
             and 'query' not in var_filtered \
             and 'object' not in var_filtered:
             raise ValueError('ERROR: either username or object requires a \
@@ -88,8 +88,8 @@ class CCPPasswordREST(object):
         # Capture Any Exceptions that Occur
         except Exception as e:
             # Print Exception Details and Exit
-            raise Exception(e) # pylint: disable=raise-missing-from
-        
+            raise Exception(e) # pylint: disable=raise-missing-from,broad-exception-raised
+
         # Deal with Python dict for return variable
         ret_response = json.loads(data.decode('UTF-8'))
         # Return Proper Response
