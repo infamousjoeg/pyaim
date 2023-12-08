@@ -37,9 +37,9 @@ class CCPPasswordREST:
 
         return f"SUCCESS: AIMWebService Found. Status Code: {status_code}"
 
-    def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name
+    def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name,disable=too-many-arguments,too-many-locals
             username=None, address=None, database=None, policyid=None,
-            reason=None, query_format=None, dual_accounts=False): # pylint: disable=too-many-arguments,too-many-locals
+            reason=None, query_format=None, dual_accounts=False):
         """Retrieve Account Object Properties using AIM Web Service."""
         # Check for username or virtual username (dual accounts)
         if dual_accounts:

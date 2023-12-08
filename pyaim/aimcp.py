@@ -4,7 +4,7 @@ import subprocess
 from sys import platform
 
 
-class CLIPasswordSDK:
+class CLIPasswordSDK: # pylint: disable=too-few-public-methods
     """Class for interacting with CyberArk's Credential Provider CLIPasswordSDK."""
 
     def __init__(self, cli_path):
@@ -12,7 +12,7 @@ class CLIPasswordSDK:
         self._cli_path = cli_path
 
         # Check for Linux OS
-        if platform == 'linux' or platform =='darwin':
+        if platform in ('linux', 'darwin'):
             self.sep = '-'
             if not os.path.isfile(self._cli_path):
                 raise OSError('ERROR: CLIPasswordSDK not found',\
@@ -29,10 +29,10 @@ class CLIPasswordSDK:
                           'Your platform is unrecognizable. Please use Linux, MacOS or Windows.')
 
 
-    def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name
+    def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name,too-many-arguments,too-many-locals
             username=None, address=None, database=None, policyid=None,
             reason=None, queryformat=None, connport=None, sendhash=False,
-            output='Password', delimiter=',', dual_accounts=False): # pylint: disable=too-many-arguments,too-many-locals
+            output='Password', delimiter=',', dual_accounts=False):
         """Retrieve Account Object Properties using CLIPasswordSDK."""
         var_dict = {
             'appid': appid,
@@ -86,11 +86,12 @@ class CLIPasswordSDK:
         ]
 
         try:
-            response, err = subprocess.Popen(
-                query,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
-            ).communicate()
+            with subprocess.Popen(
+                    query,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE
+                ) as proc:
+                response, err = proc.communicate()
 
             if err:
                 raise ConnectionError(err.decode('UTF-8').strip())
