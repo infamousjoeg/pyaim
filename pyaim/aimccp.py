@@ -10,13 +10,18 @@ class CCPPasswordREST:
     def __init__(self, base_uri, verify=True):
 
         # Declare Init Variables
-        self._base_uri = base_uri.rstrip('/').replace('https://','')
-        self._context = ssl.create_default_context()
-        self._headers = {'Content-Type': 'application/json'}
+        self._base_uri = base_uri.rstrip('/').replace('https://','') # Example: https://pvwa.cyberarkexample.com
+        self._headers = {'Content-Type': 'application/json'} # Build Header for GET Request
 
-        if verify is False:
+        if verify:
+            self._context = ssl._create_default_context()
+        else:
             self._context = ssl._create_unverified_context()
-            self._context.check_hostname = True
+            self._context.check_hostname = False
+        
+        # Client Certificate Authentication
+        if cert:
+            self._context.load_cert_chain(certfile=cert[0], keyfile=cert[1])
 
 
     def check_service(self):
