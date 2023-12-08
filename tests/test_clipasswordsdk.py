@@ -1,3 +1,4 @@
+"""Test the clipasswordsdk module."""
 #!/usr/bin/env python3
 
 from pyaim import CLIPasswordSDK

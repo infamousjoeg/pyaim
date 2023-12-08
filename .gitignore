@@ -4,3 +4,8 @@ dist/
 *.egg-info/
 assets/*.psd
 *__pycache__*
+*.pem
+*.crt
+*.key
+*.pfx
+*.p12

@@ -1,4 +1,4 @@
-# pyAIM <!-- OMIT IN TOC -->
+# pyAIM<!-- omit from toc -->
 
 ![](assets/pyAIM-sm.png)
 
@@ -8,52 +8,51 @@
 
 This project simplifies the interaction between a Python 3 application or script and CyberArk's Application Access Manager's Credential Provider using the appropriate CLIPasswordSDK executable for the Operating System being used.  By simplifying this process, developers are only required to change four (4) lines of code in their Python 3 applications and scripts to securely retrieve privileged secrets from CyberArk's Privileged Access Security (PAS) Core Solution as opposed to thirty or more (30+) without the use of this provided Client Library.
 
-### New in Version 1.2.0: <!-- OMIT IN TOC -->
+### New in Version 1.5.0: <!-- omit from toc -->
 
-Added support for all possible parameters for both AAM Credential Provider (CLIPasswordSDK) and AAM Central Credential Provider (CCPPasswordREST).
+- Added support for `delimiter` parameter in `GetPassword()` method for Credential Provider (CLIPasswordSDK) method.
+- Added support for Client Certificate Authentication in `GetPassword()` method for Centralized Credential Provider (CCPPasswordREST) method.
 
-## Table of Contents <!-- OMIT IN TOC -->
+## Table of Contents <!-- omit from toc -->
 
-- [pyAIM](#pyaim)
-    - [New in Version 1.2.0: ](#new-in-version-120)
-  - [Table of Contents ](#table-of-contents)
-  - [Install](#install)
-    - [Pre-Requisite](#pre-requisite)
-      - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method)
-      - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method)
-    - [Windows](#windows)
-      - [Install Latest Python 3](#install-latest-python-3)
-      - [Install pyAIM via Pip](#install-pyaim-via-pip)
-    - [Linux](#linux)
-      - [Ubuntu/Debian](#ubuntudebian)
-        - [Install Latest Python 3](#install-latest-python-3-1)
-        - [Install pyAIM via Pip](#install-pyaim-via-pip-1)
-      - [RHEL/CentOS](#rhelcentos)
-        - [Install Latest Python 3](#install-latest-python-3-2)
-          - [RHEL](#rhel)
-          - [CentOS](#centos)
-        - [Install pyAIM via Pip](#install-pyaim-via-pip-2)
-    - [MacOS](#macos)
-    - [Z/OS](#zos)
-      - [Install Latest Python 3](#install-latest-python-3-3)
-      - [Install pyAIM via Pip](#install-pyaim-via-pip-3)
-  - [Usage](#usage)
-    - [Check AIMWebService Availability - check_service()](#check-aimwebservice-availability---check_service)
-      - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-1)
-    - [Retrieve Account - GetPassword()](#retrieve-account---getpassword)
-      - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method-1)
-        - [Supported Parameters](#supported-parameters)
-        - [Example](#example)
-      - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-2)
-        - [Supported Parameters](#supported-parameters-1)
-        - [Example](#example-1)
-  - [Maintainer](#maintainer)
-  - [Contributing](#contributing)
-  - [License](#license)
+- [Install](#install)
+    - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method)
+    - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method)
+  - [Windows](#windows)
+    - [Install Latest Python 3](#install-latest-python-3)
+    - [Install pyAIM via Pip](#install-pyaim-via-pip)
+  - [Linux](#linux)
+    - [Ubuntu/Debian](#ubuntudebian)
+      - [Install Latest Python 3](#install-latest-python-3-1)
+      - [Install pyAIM via Pip](#install-pyaim-via-pip-1)
+    - [RHEL/CentOS](#rhelcentos)
+      - [Install Latest Python 3](#install-latest-python-3-2)
+        - [RHEL](#rhel)
+        - [CentOS](#centos)
+      - [Install pyAIM via Pip](#install-pyaim-via-pip-2)
+  - [MacOS](#macos)
+  - [Z/OS](#zos)
+    - [Install Latest Python 3](#install-latest-python-3-3)
+    - [Install pyAIM via Pip](#install-pyaim-via-pip-3)
+- [Usage](#usage)
+  - [Check AIMWebService Availability - check\_service()](#check-aimwebservice-availability---check_service)
+    - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-1)
+  - [Retrieve Account - GetPassword()](#retrieve-account---getpassword)
+    - [Credential Provider (CLIPasswordSDK) Method](#credential-provider-clipasswordsdk-method-1)
+      - [Supported Parameters](#supported-parameters)
+        - [Query Parameters](#query-parameters)
+      - [Example](#example)
+    - [Centralized Credential Provider (CCPPasswordREST) Method](#centralized-credential-provider-ccppasswordrest-method-2)
+      - [Supported Parameters](#supported-parameters-1)
+        - [CCPPasswordREST()](#ccppasswordrest)
+        - [Query Parameters](#query-parameters-1)
+      - [Example](#example-1)
+      - [Example with Client Certificate Authentication](#example-with-client-certificate-authentication)
+- [Maintainer](#maintainer)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Install
-
-### Pre-Requisite
 
 #### Credential Provider (CLIPasswordSDK) Method
 
@@ -149,6 +148,8 @@ print(service_status)
 
 ##### Supported Parameters
 
+###### Query Parameters
+
 * appid _(required)_
 * safe _(required)_
 * folder _(default: root)_
@@ -161,8 +162,11 @@ print(service_status)
 * query_format _(default: 1)_
 * connport
 * sendhash _(default: False)_
+* output _(default: Password)_
+* delimiter _(default: ,)_
+* dual_accounts _(default: False)_
 
-For compatibility with Dual Accounts where you are refercing a `VirtualUsername` - use the `username` parameter.
+For compatibility with Dual Accounts where you are referencing a `VirtualUsername` - use the `username` parameter and ensure `dual_accounts=True`.
 
 ##### Example
 
@@ -170,7 +174,7 @@ For compatibility with Dual Accounts where you are refercing a `VirtualUsername`
 from pyaim import CLIPasswordSDK
 
 aimcp = CLIPasswordSDK('/opt/CARKaim/sdk/clipasswordsdk')
-response = aimcp.GetPassword(appid='appID',safe='safeName',objectName='objectName',output='PassProps.Username,Password')
+response = aimcp.GetPassword(appid='appID',safe='safeName',object='objectName',output='PassProps.Username,Password',delimiter='|')
 
 print('Full Response: {}'.format(response))
 print('Username: {}'.format(response['PassProps.Username']))
@@ -180,6 +184,15 @@ print('Password: {}'.format(response['Password']))
 #### Centralized Credential Provider (CCPPasswordREST) Method
 
 ##### Supported Parameters
+
+###### CCPPasswordREST()
+
+* url _(required)_
+* verify _(default: True)_
+* cert _(default: None)_
+* timeout _(default: 30)_
+
+###### Query Parameters
 
 * appid _(required)_
 * safe _(required)_
@@ -191,15 +204,16 @@ print('Password: {}'.format(response['Password']))
 * policyid
 * reason
 * query_format _(default: exact)_
+* dual_accounts _(default: False)_
 
-For compatibility with Dual Accounts where you are refercing a `VirtualUsername` - use the `username` parameter.
+For compatibility with Dual Accounts where you are referencing a `VirtualUsername` - use the `username` parameter and ensure `dual_accounts=True`.
 
 ##### Example
 
 ```python
 from pyaim import CCPPasswordREST
 
-aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True, timeout=10) # set verify=False to ignore SSL
 
 service_status = aimccp.check_service()
 
@@ -212,18 +226,29 @@ else:
     raise Exception(service_status)
 ```
 
+##### Example with Client Certificate Authentication
+
+```python
+from pyaim import CCPPasswordREST
+
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True, cert=('/path/to/cert.pem', '/path/to/key.pem')) # set verify=False to ignore SSL
+
+...
+```
+
 ## Maintainer
 
 [@infamousjoeg](https://github.com/infamousjoeg)
 
+[![Buy me a coffee][buymeacoffee-shield]][buymeacoffee]
+
+[buymeacoffee]: https://www.buymeacoffee.com/infamousjoeg
+[buymeacoffee-shield]: https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png
+
 ## Contributing
 
-For the time being, only internal CyberArk contributions are being considered.
-
-Feel free to report any feature requests or bugs on the [GitHub Issues](https://github.com/infamousjoeg/pyaim/issues) page.
-
-Keep checking back for an update regarding open Contributions in the near future.
+Contributions are open!  Check out [CONTRIBUTING.md]() for more details!
 
 ## License
 
-[MIT](LICENSE) © Joe Garcia, CISSP
+[MIT](LICENSE)
