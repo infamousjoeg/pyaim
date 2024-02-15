@@ -7,10 +7,11 @@ import urllib.parse
 class CCPPasswordREST:
     """Class for interacting with CyberArk's CCP REST API."""
 
-    def __init__(self, base_uri, verify=True, cert=None, timeout=30):
+    def __init__(self, base_uri, service_path="AIMWebService", verify=True, cert=None, timeout=30):
 
         # Declare Init Variables
         self._base_uri = base_uri.rstrip('/').replace('https://','')
+        self._service_path = service_path
         self._headers = {'Content-Type': 'application/json'}
         self._timeout = timeout
 
@@ -28,7 +29,7 @@ class CCPPasswordREST:
     def check_service(self):
         """Checks that the AIM Web Service is available."""
         try:
-            url = '/AIMWebService/v1.1/aim.asmx'
+            url = f'/{self._service_path}/v1.1/aim.asmx'
             conn = http.client.HTTPSConnection(
                 self._base_uri, context=self._context, timeout=self._timeout)
             conn.request("GET", url, headers=self._headers)
@@ -37,12 +38,12 @@ class CCPPasswordREST:
             conn.close()
 
             if status_code != 200:
-                raise ConnectionError('ERROR: AIMWebService Not Found.')
+                raise ConnectionError('ERROR: {} Not Found.'.format(self._service_path))
 
         except Exception as e:
             raise Exception(e) # pylint: disable=raise-missing-from,broad-exception-raised
 
-        return f"SUCCESS: AIMWebService Found. Status Code: {status_code}"
+        return f"SUCCESS: {self._service_path} Found. Status Code: {status_code}"
 
     def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name,disable=too-many-arguments,too-many-locals
             username=None, address=None, database=None, policyid=None,
@@ -83,7 +84,7 @@ class CCPPasswordREST:
         # Urlify parameters for GET Request
         params = urllib.parse.urlencode(var_filtered)
         # Build URL for GET Request
-        url = f"/AIMWebService/api/Accounts?{params}"
+        url = f"/{self._service_path}/api/Accounts?{params}"
 
         try:
             conn = http.client.HTTPSConnection(
