@@ -8,11 +8,9 @@
 
 This project simplifies the interaction between a Python 3 application or script and CyberArk's Application Access Manager's Credential Provider using the appropriate CLIPasswordSDK executable for the Operating System being used.  By simplifying this process, developers are only required to change four (4) lines of code in their Python 3 applications and scripts to securely retrieve privileged secrets from CyberArk's Privileged Access Security (PAS) Core Solution as opposed to thirty or more (30+) without the use of this provided Client Library.
 
-### New in Version 1.5.0: <!-- omit from toc -->
+### New in Version 1.5.1: <!-- omit from toc -->
 
-- Added support for `timeout` when intializing the CCPPasswordREST() class.
-- Added support for `delimiter` parameter in `GetPassword()` method for Credential Provider (CLIPasswordSDK) method.
-- Added support for Client Certificate Authentication in `GetPassword()` method for Centralized Credential Provider (CCPPasswordREST) method.
+- Added support for custom service path during initialization of the CCPPasswordREST() class. [See documentation below for more details.](#example-with-custom-service-path)
 
 ## Table of Contents <!-- omit from toc -->
 
@@ -49,6 +47,7 @@ This project simplifies the interaction between a Python 3 application or script
         - [Query Parameters](#query-parameters-1)
       - [Example](#example-1)
       - [Example with Client Certificate Authentication](#example-with-client-certificate-authentication)
+      - [Example with Custom Service Path](#example-with-custom-service-path)
 - [Maintainer](#maintainer)
 - [Contributing](#contributing)
 - [License](#license)
@@ -214,7 +213,8 @@ For compatibility with Dual Accounts where you are referencing a `VirtualUsernam
 ```python
 from pyaim import CCPPasswordREST
 
-aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True, timeout=10) # set verify=False to ignore SSL
+# set verify=False to ignore SSL
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', 'AIMWebService', verify=True, timeout=10)
 
 service_status = aimccp.check_service()
 
@@ -232,7 +232,19 @@ else:
 ```python
 from pyaim import CCPPasswordREST
 
-aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True, cert=('/path/to/cert.pem', '/path/to/key.pem')) # set verify=False to ignore SSL
+# set verify=False to ignore SSL
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True, cert=('/path/to/cert.pem', '/path/to/key.pem'))
+
+...
+```
+
+##### Example with Custom Service Path
+
+```python
+from pyaim import CCPPasswordREST
+
+# set verify=False to ignore SSL
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', 'AIMWebServiceDEV', verify=True)
 
 ...
 ```
@@ -240,8 +252,6 @@ aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True, cert=(
 ## Maintainer
 
 [@infamousjoeg](https://github.com/infamousjoeg)
-
-[![Buy me a coffee][buymeacoffee-shield]][buymeacoffee]
 
 [buymeacoffee]: https://www.buymeacoffee.com/infamousjoeg
 [buymeacoffee-shield]: https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png
