@@ -7,7 +7,7 @@ import urllib.parse
 class CCPPasswordREST:
     """Class for interacting with CyberArk's CCP REST API."""
 
-    def __init__(self, base_uri, service_path="AIMWebService", verify=True, cert=None, timeout=30):
+    def __init__(self, base_uri, service_path="AIMWebService", verify=True, cert=None, timeout=30): # pylint: disable=too-many-arguments
 
         # Declare Init Variables
         self._base_uri = base_uri.rstrip('/').replace('https://','')
@@ -38,7 +38,7 @@ class CCPPasswordREST:
             conn.close()
 
             if status_code != 200:
-                raise ConnectionError('ERROR: {} Not Found.'.format(self._service_path))
+                raise ConnectionError(f'ERROR: {self._service_path} Not Found.')
 
         except Exception as e:
             raise Exception(e) # pylint: disable=raise-missing-from,broad-exception-raised
