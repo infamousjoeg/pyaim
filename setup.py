@@ -28,7 +28,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3 :: Only",
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
@@ -52,7 +52,11 @@ setuptools.setup(
         "identity",
         "pam",
         "pim",
-        "pas"
+        "pas",
+        "ccp",
+        "cp",
+        "credential provider",
+        "identity security"
         ],
     project_urls={
         'Bug Reports': 'https://github.com/infamousjoeg/pyaim/issues/new?assignees=&labels=&template=bug_report.md&title=',
