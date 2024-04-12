@@ -1,2 +1,2 @@
--i https://pypi.org/simple/
-urllib3==2.1.0
+-i https://pypi.org/simple
+urllib3==2.2.0; python_version >= '3.8'
