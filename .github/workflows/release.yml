@@ -41,7 +41,7 @@ jobs:
       - name: Extract version
         id: get_version
         run: |
-          VERSION=$(grep -oP '(?<=^__version__ = ")([^"]+)' pyaim/version.py)
+          VERSION=$(grep '^__version__ = ' pyaim/version.py | cut -d '"' -f 2 | cut -d "'" -f 2)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "::set-output name=VERSION::$VERSION"
 
@@ -52,7 +52,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ env.VERSION }}
-          release_name: Release ${{ env.VERSION }}
+          release_name: v${{ env.VERSION }}
           draft: false
           prerelease: false
 
@@ -68,7 +68,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
