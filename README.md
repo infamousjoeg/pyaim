@@ -8,10 +8,6 @@
 
 This project simplifies the interaction between a Python 3 application or script and CyberArk's Application Access Manager's Credential Provider using the appropriate CLIPasswordSDK executable for the Operating System being used.  By simplifying this process, developers are only required to change four (4) lines of code in their Python 3 applications and scripts to securely retrieve privileged secrets from CyberArk's Privileged Access Security (PAS) Core Solution as opposed to thirty or more (30+) without the use of this provided Client Library.
 
-### New in Version 1.5.1: <!-- omit from toc -->
-
-- Added support for custom service path during initialization of the CCPPasswordREST() class. [See documentation below for more details.](#example-with-custom-service-path)
-
 ## Table of Contents <!-- omit from toc -->
 
 - [Install](#install)

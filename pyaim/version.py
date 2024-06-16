@@ -8,4 +8,4 @@ is intended to be reused in multiple places.
 Changing triggers automatic release of a new version. 
 """
 
-__version__ = '1.5.2'
+__version__ = '1.5.3'
