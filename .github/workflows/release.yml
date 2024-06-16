@@ -4,12 +4,13 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   check-version-change:
     runs-on: ubuntu-latest
     outputs:
-      version_changed: ${{ steps.version_changed.outputs.changed }}
+      version_changed: ${{ steps.version_changed.outputs.version }}
 
     steps:
       - name: Checkout code
