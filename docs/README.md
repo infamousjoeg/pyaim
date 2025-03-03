@@ -137,7 +137,8 @@ Rocket Software has [ported Python 2 and 3](https://www.rocketsoftware.com/zos-o
 ```python
 from pyaim import CCPPasswordREST
 
-aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
+# set verify=False to ignore SSL or specify a path to a file containing your CAs in pem format
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True)
 service_status = aimccp.check_service()
 print(service_status)
 ```
@@ -213,7 +214,7 @@ For compatibility with Dual Accounts where you are referencing a `VirtualUsernam
 ```python
 from pyaim import CCPPasswordREST
 
-# set verify=False to ignore SSL
+# set verify=False to ignore SSL or specify a path to a file containing your CAs in pem format
 aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', 'AIMWebService', verify=True, timeout=10)
 
 service_status = aimccp.check_service()
@@ -232,7 +233,7 @@ else:
 ```python
 from pyaim import CCPPasswordREST
 
-# set verify=False to ignore SSL
+# set verify=False to ignore SSL or specify a path to a file containing your CAs in pem format
 aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True, cert=('/path/to/cert.pem', '/path/to/key.pem'))
 
 ...
@@ -243,7 +244,7 @@ aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True, cert=(
 ```python
 from pyaim import CCPPasswordREST
 
-# set verify=False to ignore SSL
+# set verify=False to ignore SSL or specify a path to a file containing your CAs in pem format
 aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', 'AIMWebServiceDEV', verify=True)
 
 ...
