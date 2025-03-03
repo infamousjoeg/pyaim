@@ -17,6 +17,8 @@ class CCPPasswordREST:
 
         if verify:
             self._context = ssl.create_default_context()
+            if verify != True:
+                self._context.load_verify_locations(verify)
         else:
             self._context = ssl._create_unverified_context()
             self._context.check_hostname = False
