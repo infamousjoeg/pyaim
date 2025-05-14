@@ -184,7 +184,11 @@ print('Password: {}'.format(response['Password']))
 ###### CCPPasswordREST()
 
 * url _(required)_
-* verify _(default: True)_
+* verify _(default: True)_ - SSL certificate verification. Accepts:
+  * `True` - Use system's default certificate bundle
+  * `False` - Disable SSL verification (not recommended for production)
+  * `/path/to/cert.pem` - Path to custom certificate bundle file
+  * `/path/to/cert/dir` - Path to directory containing certificates (must be processed with c_rehash)
 * cert _(default: None)_
 * timeout _(default: 30)_
 
@@ -243,6 +247,27 @@ from pyaim import CCPPasswordREST
 aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', 'AIMWebServiceDEV', verify=True)
 
 ...
+```
+
+##### Example with Custom Certificate Bundle
+
+```python
+from pyaim import CCPPasswordREST
+
+# Use custom certificate bundle for SSL verification
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify='/path/to/custom-ca-bundle.pem')
+
+# Or use a directory of certificates
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify='/etc/ssl/certs')
+
+service_status = aimccp.check_service()
+
+if service_status == 'SUCCESS: AIMWebService Found. Status Code: 200':
+    response = aimccp.GetPassword(appid='appid',safe='safe',object='objectName',reason='Reason message')
+    print('Username: {}'.format(response['Username']))
+    print('Password: {}'.format(response['Content']))
+else:
+    raise Exception(service_status)
 ```
 
 ## Maintainer
