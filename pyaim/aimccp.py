@@ -1,11 +1,23 @@
 """Module providing a class for interacting with CyberArk's CCP REST API."""
 import http.client
 import json
+import os
 import ssl
 import urllib.parse
 
 class CCPPasswordREST:
-    """Class for interacting with CyberArk's CCP REST API."""
+    """Class for interacting with CyberArk's CCP REST API.
+
+    Args:
+        base_uri: Base URI for the CyberArk server
+        service_path: Service path (default: "AIMWebService")
+        verify: SSL certificate verification. Can be:
+            - True: Use default certificate verification
+            - False: Disable certificate verification
+            - str: Path to CA bundle file or directory
+        cert: Client certificate tuple (certfile, keyfile)
+        timeout: Request timeout in seconds
+    """
 
     def __init__(self, base_uri, service_path="AIMWebService", verify=True, cert=None, timeout=30): # pylint: disable=too-many-arguments
 
@@ -15,11 +27,23 @@ class CCPPasswordREST:
         self._headers = {'Content-Type': 'application/json'}
         self._timeout = timeout
 
-        if verify:
-            self._context = ssl.create_default_context()
-        else:
+        if verify is False:
             self._context = ssl._create_unverified_context()
             self._context.check_hostname = False
+        elif isinstance(verify, str):
+            if not os.path.exists(verify):
+                raise ValueError(f"Certificate path does not exist: {verify}")
+
+            if os.path.isfile(verify):
+                self._context = ssl.create_default_context(cafile=verify)
+            elif os.path.isdir(verify):
+                self._context = ssl.create_default_context(capath=verify)
+            else:
+                raise ValueError(f"Path is neither file nor directory: {verify}")
+        elif verify is True:
+            self._context = ssl.create_default_context()
+        else:
+            raise TypeError(f"verify must be bool or str, got {type(verify)}")
 
         # Client Certificate Authentication
         if cert:
