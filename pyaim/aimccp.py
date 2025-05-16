@@ -51,9 +51,10 @@ class CCPPasswordREST:
 
 
     def check_service(self):
-        """Checks that the AIM Web Service is available."""
+        """Checks that the AIM Web Service REST API is available."""
         try:
-            url = f'/{self._service_path}/v1.1/aim.asmx'
+            # Use the accounts endpoint but with incomplete parameters to get a predictable error
+            url = f'/{self._service_path}/api/Accounts?appid=CheckService'
             conn = http.client.HTTPSConnection(
                 self._base_uri, context=self._context, timeout=self._timeout)
             conn.request("GET", url, headers=self._headers)
@@ -61,13 +62,22 @@ class CCPPasswordREST:
             status_code = res.status
             conn.close()
 
-            if status_code != 200:
-                raise ConnectionError(f'ERROR: {self._service_path} Not Found.')
+            # 400 means service exists but rejected our intentionally invalid request
+            # 401/403 means service exists but we lack authorization
+            # Both indicate the service is running
+            if status_code in [400, 401, 403]:
+                return f"SUCCESS: {self._service_path} REST API Found. Status Code: {status_code}"
+            elif status_code == 404:
+                raise ConnectionError(f'ERROR: {self._service_path} Not Found. Check service path.')
+            elif status_code >= 500:
+                raise ConnectionError(f'ERROR: {self._service_path} Server Error. Status Code: {status_code}')
+            else:
+                # Any other response is unexpected
+                raise ConnectionError(f'ERROR: Unexpected response from {self._service_path}. Status Code: {status_code}')
 
         except Exception as e:
             raise Exception(e) # pylint: disable=raise-missing-from,broad-exception-raised
 
-        return f"SUCCESS: {self._service_path} Found. Status Code: {status_code}"
 
     def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name,disable=too-many-arguments,too-many-locals
             username=None, address=None, database=None, policyid=None,
