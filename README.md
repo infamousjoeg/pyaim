@@ -126,16 +126,47 @@ Rocket Software has [ported Python 2 and 3](https://www.rocketsoftware.com/zos-o
 
 ## Usage
 
-### Check AIMWebService Availability - check_service()
+### Check AIM Web Service - check_service()
+
+⚠️ **Important**: In production mode (default), `check_service()` validates local configuration **without making API calls** to avoid generating CCP logs. For actual service health checks, use `GetPassword()` with test credentials.
 
 #### Centralized Credential Provider (CCPPasswordREST) Method
 
+**Configuration Validation (No API Call)**
 ```python
 from pyaim import CCPPasswordREST
 
-aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True) # set verify=False to ignore SSL
-service_status = aimccp.check_service()
-print(service_status)
+# Validates configuration locally without contacting CCP
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True)
+config_status = aimccp.check_service()
+print(config_status)
+# Output: "Configuration validated for ccp.cyberarkdemo.example/AIMWebService. Use GetPassword() to verify service health."
+```
+
+**Production Health Check (Recommended)**
+```python
+from pyaim import CCPPasswordREST
+
+aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify=True)
+
+# Health check using actual credential retrieval
+try:
+    response = aimccp.GetPassword(
+        appid='monitoring_appid',
+        safe='health_check_safe',
+        object='health_check_account'
+    )
+    print("✓ CCP service is healthy and accessible")
+    print(f"Retrieved account: {response.get('Username', 'N/A')}")
+except ConnectionError as e:
+    print(f"✗ CCP service unhealthy: {e}")
+    # Handle service down/unreachable scenario
+except ValueError as e:
+    print(f"✗ Configuration error: {e}")
+    # Handle parameter validation errors
+except Exception as e:
+    print(f"✗ CCP error: {e}")
+    # Handle other errors
 ```
 
 ### Retrieve Account - GetPassword()
@@ -260,15 +291,50 @@ aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify='/path/to/cu
 # Or use a directory of certificates
 aimccp = CCPPasswordREST('https://ccp.cyberarkdemo.example', verify='/etc/ssl/certs')
 
-service_status = aimccp.check_service()
+# Validate configuration
+config_status = aimccp.check_service()
+print(config_status)
 
-if service_status == 'SUCCESS: AIMWebService Found. Status Code: 200':
-    response = aimccp.GetPassword(appid='appid',safe='safe',object='objectName',reason='Reason message')
-    print('Username: {}'.format(response['Username']))
-    print('Password: {}'.format(response['Content']))
-else:
-    raise Exception(service_status)
+# Actual credential retrieval
+response = aimccp.GetPassword(appid='appid',safe='safe',object='objectName',reason='Reason message')
+print('Username: {}'.format(response['Username']))
+print('Password: {}'.format(response['Content']))
 ```
+
+## Health Check Best Practices
+
+### Why GetPassword() for Health Checks?
+
+The `GetPassword()` method is the recommended approach for health checking because:
+
+1. **No False Logs**: Doesn't generate error logs in CCP with blank AppID/query fields
+2. **Real Validation**: Actually tests the full authentication and retrieval flow
+3. **Production Ready**: Uses legitimate credentials, avoiding synthetic health check calls
+4. **Actionable Errors**: Provides specific error messages for troubleshooting
+
+### Setting Up Health Check Accounts
+
+Create a dedicated account in CCP for health monitoring:
+
+1. Create a safe called `health_check_safe` (or similar)
+2. Store a test account called `health_check_account` with a known password
+3. Create an AppID called `monitoring_appid` with read-only access to the safe
+4. Use these credentials in your health check scripts
+
+**Benefits of this approach:**
+- Uses real CCP functionality
+- Generates legitimate, filterable audit logs
+- Provides accurate service status
+- Allows alert suppression based on AppID if needed
+
+### Migration from Legacy check_service()
+
+If upgrading from versions < 1.5.4 that relied on `check_service()` for actual health checks:
+
+1. Replace `check_service()` calls with `GetPassword()` using test credentials
+2. Set up dedicated health check AppID and safe (see above)
+3. Configure monitoring to catch `ConnectionError` exceptions for service down alerts
+4. Update alert filtering to use the new health check AppID instead of generic error patterns
 
 ## Maintainer
 

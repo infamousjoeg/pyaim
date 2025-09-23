@@ -51,38 +51,58 @@ class CCPPasswordREST:
 
 
     def check_service(self):
-        """Checks that the AIM Web Service REST API is available."""
-        try:
-            # Use the accounts endpoint but with incomplete parameters to get a predictable error
-            url = f'/{self._service_path}/api/Accounts?appid=CheckService'
-            conn = http.client.HTTPSConnection(
-                self._base_uri, context=self._context, timeout=self._timeout)
-            conn.request("GET", url, headers=self._headers)
-            res = conn.getresponse()
-            status_code = res.status
-            conn.close()
+        """Validates connection configuration without making API calls.
 
-            # 400 means service exists but rejected our intentionally invalid request
-            # 401/403 means service exists but we lack authorization
-            # Both indicate the service is running
-            if status_code in [400, 401, 403]:
-                return f"SUCCESS: {self._service_path} REST API Found. Status Code: {status_code}"
-            elif status_code == 404:
-                raise ConnectionError(f'ERROR: {self._service_path} Not Found. Check service path.')
-            elif status_code >= 500:
-                raise ConnectionError(f'ERROR: {self._service_path} Server Error. Status Code: {status_code}')
-            else:
-                # Any other response is unexpected
-                raise ConnectionError(f'ERROR: Unexpected response from {self._service_path}. Status Code: {status_code}')
+        Production Mode: This method performs LOCAL validation only to avoid
+        generating unnecessary logs in CCP. For actual service health checks,
+        use GetPassword() and handle exceptions.
 
-        except Exception as e:
-            raise Exception(e) # pylint: disable=raise-missing-from,broad-exception-raised
+        Returns:
+            str: Success message indicating configuration is valid
+
+        Raises:
+            ValueError: If connection configuration is invalid
+
+        Note:
+            This method does NOT verify if the CCP service is actually running.
+            To verify service availability, call GetPassword() with valid
+            credentials and handle any ConnectionError or Exception responses.
+
+        Example:
+            # Don't rely on check_service() for health checks
+            try:
+                response = aimccp.GetPassword(appid='healthcheck',
+                                             safe='test',
+                                             object='testaccount')
+                # Service is healthy and credentials valid
+            except ConnectionError as e:
+                # Service may be down or unreachable
+                print(f"Service unhealthy: {e}")
+            except Exception as e:
+                # Other errors (auth, permissions, etc.)
+                print(f"Service error: {e}")
+        """
+        # Validate that we have minimum connection info
+        if not self._base_uri:
+            raise ValueError("Base URI is required for connection")
+
+        if not self._service_path:
+            raise ValueError("Service path is required for connection")
+
+        if not self._context:
+            raise ValueError("SSL context not properly initialized")
+
+        # Return success without making any API calls (Production Mode)
+        return f"Configuration validated for {self._base_uri}/{self._service_path}. Use GetPassword() to verify service health."
 
 
     def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name,disable=too-many-arguments,too-many-locals
             username=None, address=None, database=None, policyid=None,
             reason=None, query_format=None, dual_accounts=False):
-        """Retrieve Account Object Properties using AIM Web Service."""
+        """Retrieve Account Object Properties using AIM Web Service.
+
+        This method also serves as the recommended health check mechanism.
+        """
         # Check for username or virtual username (dual accounts)
         if dual_accounts:
             var_dict = f"{'query': 'VirtualUsername={username}'}"
@@ -125,12 +145,39 @@ class CCPPasswordREST:
                 self._base_uri, context=self._context, timeout=self._timeout)
             conn.request("GET", url, headers=self._headers)
             res = conn.getresponse()
+            status_code = res.status
             data = res.read()
             conn.close()
 
-        # Capture Any Exceptions that Occur
+            # Enhanced error handling for health check use cases
+            if status_code == 404:
+                raise ConnectionError(
+                    f"CCP service not found at {self._base_uri}/{self._service_path}. "
+                    f"Status: {status_code}. Check service path and CCP installation."
+                )
+            elif status_code >= 500:
+                raise ConnectionError(
+                    f"CCP service error at {self._base_uri}/{self._service_path}. "
+                    f"Status: {status_code}. Service may be down or misconfigured."
+                )
+            elif status_code == 401:
+                raise ConnectionError(
+                    f"Authentication failed. AppID '{appid}' may not be authorized. "
+                    f"Status: {status_code}."
+                )
+            elif status_code == 403:
+                raise ConnectionError(
+                    f"Access forbidden. AppID '{appid}' lacks permissions for safe '{safe}'. "
+                    f"Status: {status_code}."
+                )
+
+        except http.client.HTTPException as e:
+            raise ConnectionError(
+                f"Network error connecting to {self._base_uri}: {e}"
+            ) from e
+        except ConnectionError:
+            raise
         except Exception as e:
-            # Print Exception Details and Exit
             raise Exception(e) # pylint: disable=raise-missing-from,broad-exception-raised
 
         # Deal with Python dict for return variable
