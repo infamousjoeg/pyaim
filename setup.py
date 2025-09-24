@@ -26,6 +26,7 @@ setuptools.setup(
     url="https://github.com/infamousjoeg/pyaim",
     license="MIT",
     packages=setuptools.find_packages(),
+    python_requires=">=3.10",
     classifiers=[
         "Programming Language :: Python :: 3 :: Only",
         "Development Status :: 5 - Production/Stable",

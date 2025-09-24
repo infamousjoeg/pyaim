@@ -29,7 +29,7 @@ class CLIPasswordSDK: # pylint: disable=too-few-public-methods
                           'Your platform is unrecognizable. Please use Linux, MacOS or Windows.')
 
 
-    def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name,too-many-arguments,too-many-locals
+    def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name,too-many-arguments,too-many-locals,too-many-positional-arguments
             username=None, address=None, database=None, policyid=None,
             reason=None, queryformat=None, connport=None, sendhash=False,
             output='Password', delimiter=',', dual_accounts=False):
