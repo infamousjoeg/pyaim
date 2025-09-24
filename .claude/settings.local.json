@@ -17,7 +17,8 @@
       "Bash(gh run list:*)",
       "Bash(python3:*)",
       "Bash(pip3 install:*)",
-      "Bash(PYTHONPATH=. python3:*)"
+      "Bash(PYTHONPATH=. python3:*)",
+      "Bash(gh run view:*)"
     ],
     "deny": [],
     "ask": []

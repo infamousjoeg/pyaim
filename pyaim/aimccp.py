@@ -127,7 +127,7 @@ class CCPPasswordREST:
                 f"Invalid response from CCP (Status {status_code}): {response_text}"
             ) from e
 
-    def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name,too-many-arguments,too-many-locals,too-many-positional-arguments,too-many-branches
+    def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name,too-many-arguments,too-many-locals,too-many-branches,too-many-positional-arguments
             username=None, address=None, database=None, policyid=None,
             reason=None, query_format=None, dual_accounts=False):
         """Retrieve Account Object Properties using AIM Web Service.
