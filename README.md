@@ -336,6 +336,91 @@ If upgrading from versions < 1.5.4 that relied on `check_service()` for actual h
 3. Configure monitoring to catch `ConnectionError` exceptions for service down alerts
 4. Update alert filtering to use the new health check AppID instead of generic error patterns
 
+## Security Best Practices
+
+### SSL Certificate Configuration
+
+#### Production Environments (Recommended)
+```python
+# Use system's default certificate bundle (most secure)
+aimccp = CCPPasswordREST('https://ccp.company.com', verify=True)
+
+# Use custom CA bundle for internal certificates
+aimccp = CCPPasswordREST('https://ccp.company.com', verify='/etc/ssl/certs/company-ca.pem')
+
+# Use certificate directory (ensure proper permissions)
+aimccp = CCPPasswordREST('https://ccp.company.com', verify='/etc/ssl/certs/')
+```
+
+#### Certificate File Security
+
+**File Permissions**:
+```bash
+# Certificate files should be readable by application only
+chmod 600 /path/to/cert.pem
+chmod 600 /path/to/key.pem
+
+# Certificate directories should have restricted access
+chmod 755 /etc/ssl/certs/
+chmod 600 /etc/ssl/certs/*
+```
+
+**Important Security Notes**:
+- ⚠️ **Never use `verify=False` in production** - this disables SSL certificate validation
+- 🔒 **Protect private key files** - ensure only the application user can read them
+- 📋 **Regular certificate rotation** - monitor certificate expiration dates
+- 🔐 **Use client certificates** for additional authentication when available
+
+#### Troubleshooting SSL Issues
+
+**Common SSL Errors and Solutions**:
+
+1. **Certificate Verification Failed**
+   ```
+   Error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed
+   Solution: Use custom CA bundle or check certificate chain
+   ```
+
+2. **Certificate Path Issues**
+   ```
+   Error: Certificate path does not exist: /path/to/cert
+   Solution: Verify file exists and has correct permissions
+   ```
+
+3. **Corporate Firewalls/Proxies**
+   ```python
+   # For environments with corporate certificates
+   aimccp = CCPPasswordREST(
+       'https://ccp.company.com',
+       verify='/etc/ssl/certs/corporate-bundle.pem'
+   )
+   ```
+
+### AppID Security
+
+**Health Check AppID Configuration**:
+- Create dedicated AppID for monitoring (e.g., `monitoring_appid`)
+- Grant **read-only** access to health check safe only
+- Use **specific safe permissions** rather than broad access
+- **Monitor AppID usage** through CCP audit logs
+- **Rotate credentials** according to security policy
+
+**Example Secure Setup**:
+```python
+# Production health check with dedicated, limited-privilege AppID
+try:
+    response = aimccp.GetPassword(
+        appid='health_monitor_readonly',  # Limited scope AppID
+        safe='monitoring_safe',           # Dedicated safe for health checks
+        object='health_check_account',    # Non-sensitive test account
+        reason='Automated health check'   # Clear audit trail
+    )
+    # Service healthy
+except ConnectionError as e:
+    # Log security-relevant connection issues
+    logger.error(f"CCP health check failed: {e}")
+```
+
 ## Maintainer
 
 [@infamousjoeg](https://github.com/infamousjoeg)

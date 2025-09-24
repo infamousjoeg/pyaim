@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh pr:*)",
+      "Bash(gh repo view:*)",
+      "Bash(cat:*)",
+      "Bash(git fetch:*)",
+      "Bash(git merge:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(git tag:*)",
+      "Bash(gh release list:*)",
+      "Bash(gh secret:*)",
+      "Bash(gh workflow:*)",
+      "Bash(gh run list:*)",
+      "Bash(python3:*)",
+      "Bash(pip3 install:*)",
+      "Bash(PYTHONPATH=. python3:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

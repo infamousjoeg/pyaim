@@ -95,6 +95,36 @@ class CCPPasswordREST:
         # Return success without making any API calls (Production Mode)
         return f"Configuration validated for {self._base_uri}/{self._service_path}. Use GetPassword() to verify service health."
 
+    def _parse_ccp_response(self, data, status_code):
+        """Parse CCP response and handle JSON error objects.
+
+        Args:
+            data: Raw response data from CCP
+            status_code: HTTP status code
+
+        Returns:
+            dict: Parsed response data
+
+        Raises:
+            ConnectionError: If response contains CCP error or is invalid JSON
+        """
+        try:
+            response_data = json.loads(data.decode('UTF-8'))
+
+            # Check for CCP error response format
+            if 'ErrorCode' in response_data and 'ErrorMsg' in response_data:
+                error_code = response_data['ErrorCode']
+                error_msg = response_data['ErrorMsg']
+                raise ConnectionError(f"CCP Error {error_code}: {error_msg}")
+
+            return response_data
+
+        except json.JSONDecodeError as e:
+            # Handle non-JSON responses or malformed JSON
+            response_text = data.decode('UTF-8')[:200]  # Truncate for safety
+            raise ConnectionError(
+                f"Invalid response from CCP (Status {status_code}): {response_text}"
+            ) from e
 
     def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name,disable=too-many-arguments,too-many-locals
             username=None, address=None, database=None, policyid=None,
@@ -105,7 +135,7 @@ class CCPPasswordREST:
         """
         # Check for username or virtual username (dual accounts)
         if dual_accounts:
-            var_dict = f"{'query': 'VirtualUsername={username}'}"
+            var_dict = {'query': f'VirtualUsername={username}'}
         else:
             var_dict = {'username': username}
 
@@ -176,11 +206,18 @@ class CCPPasswordREST:
                 f"Network error connecting to {self._base_uri}: {e}"
             ) from e
         except ConnectionError:
+            # Re-raise ConnectionError exceptions without modification
             raise
+        except ssl.SSLError as e:
+            raise ConnectionError(
+                f"SSL connection failed to {self._base_uri}: {e}. "
+                "Check certificate configuration or use verify=False for testing."
+            ) from e
         except Exception as e:
-            raise Exception(e) # pylint: disable=raise-missing-from,broad-exception-raised
+            # Preserve original exception context for unexpected errors
+            raise ConnectionError(
+                f"Unexpected error connecting to CCP at {self._base_uri}: {type(e).__name__}: {e}"
+            ) from e
 
-        # Deal with Python dict for return variable
-        ret_response = json.loads(data.decode('UTF-8'))
-        # Return Proper Response
-        return ret_response
+        # Parse response and handle CCP error objects
+        return self._parse_ccp_response(data, status_code)
