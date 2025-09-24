@@ -19,7 +19,7 @@ class CCPPasswordREST:
         timeout: Request timeout in seconds
     """
 
-    def __init__(self, base_uri, service_path="AIMWebService", verify=True, cert=None, timeout=30): # pylint: disable=too-many-arguments
+    def __init__(self, base_uri, service_path="AIMWebService", verify=True, cert=None, timeout=30): # pylint: disable=too-many-arguments,too-many-positional-arguments
 
         # Declare Init Variables
         self._base_uri = base_uri.rstrip('/').replace('https://','')
@@ -93,7 +93,8 @@ class CCPPasswordREST:
             raise ValueError("SSL context not properly initialized")
 
         # Return success without making any API calls (Production Mode)
-        return f"Configuration validated for {self._base_uri}/{self._service_path}. Use GetPassword() to verify service health."
+        return f"Configuration validated for {self._base_uri}/{self._service_path}. " \
+               "Use GetPassword() to verify service health."
 
     def _parse_ccp_response(self, data, status_code):
         """Parse CCP response and handle JSON error objects.
@@ -126,7 +127,7 @@ class CCPPasswordREST:
                 f"Invalid response from CCP (Status {status_code}): {response_text}"
             ) from e
 
-    def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name,disable=too-many-arguments,too-many-locals
+    def GetPassword(self, appid=None, safe=None, folder=None, object=None, # pylint: disable=redefined-builtin,invalid-name,too-many-arguments,too-many-locals,too-many-positional-arguments,too-many-branches
             username=None, address=None, database=None, policyid=None,
             reason=None, query_format=None, dual_accounts=False):
         """Retrieve Account Object Properties using AIM Web Service.
@@ -185,17 +186,17 @@ class CCPPasswordREST:
                     f"CCP service not found at {self._base_uri}/{self._service_path}. "
                     f"Status: {status_code}. Check service path and CCP installation."
                 )
-            elif status_code >= 500:
+            if status_code >= 500:
                 raise ConnectionError(
                     f"CCP service error at {self._base_uri}/{self._service_path}. "
                     f"Status: {status_code}. Service may be down or misconfigured."
                 )
-            elif status_code == 401:
+            if status_code == 401:
                 raise ConnectionError(
                     f"Authentication failed. AppID '{appid}' may not be authorized. "
                     f"Status: {status_code}."
                 )
-            elif status_code == 403:
+            if status_code == 403:
                 raise ConnectionError(
                     f"Access forbidden. AppID '{appid}' lacks permissions for safe '{safe}'. "
                     f"Status: {status_code}."

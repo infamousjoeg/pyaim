@@ -18,6 +18,7 @@ from unittest.mock import patch, Mock
 # Add parent directory to path for testing
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# pylint: disable=wrong-import-position
 from pyaim.aimccp import CCPPasswordREST
 
 
@@ -42,17 +43,17 @@ class TestProductionMode(unittest.TestCase):
         """Verify check_service() validates basic configuration."""
         # Test with empty base_uri
         ccp_invalid = CCPPasswordREST.__new__(CCPPasswordREST)
-        ccp_invalid._base_uri = ""
-        ccp_invalid._service_path = "AIMWebService"
-        ccp_invalid._context = Mock()
+        ccp_invalid._base_uri = ""  # pylint: disable=protected-access
+        ccp_invalid._service_path = "AIMWebService"  # pylint: disable=protected-access
+        ccp_invalid._context = Mock()  # pylint: disable=protected-access
 
         with self.assertRaises(ValueError) as cm:
             ccp_invalid.check_service()
         self.assertIn("Base URI is required", str(cm.exception))
 
         # Test with empty service_path
-        ccp_invalid._base_uri = "test.com"
-        ccp_invalid._service_path = ""
+        ccp_invalid._base_uri = "test.com"  # pylint: disable=protected-access
+        ccp_invalid._service_path = ""  # pylint: disable=protected-access
 
         with self.assertRaises(ValueError) as cm:
             ccp_invalid.check_service()
@@ -63,12 +64,13 @@ class TestProductionMode(unittest.TestCase):
         # Test CCP error response
         error_response = {
             "ErrorCode": "APPAP423E",
-            "ErrorMsg": "An error occurred while trying to connect to the vault with webservice app: INVALID. Error code: 9."
+            "ErrorMsg": "An error occurred while trying to connect to the vault "
+                        "with webservice app: INVALID. Error code: 9."
         }
         error_data = json.dumps(error_response).encode('utf-8')
 
         with self.assertRaises(ConnectionError) as cm:
-            self.ccp._parse_ccp_response(error_data, 400)
+            self.ccp._parse_ccp_response(error_data, 400)  # pylint: disable=protected-access
 
         error_msg = str(cm.exception)
         self.assertIn("APPAP423E", error_msg)
@@ -79,7 +81,7 @@ class TestProductionMode(unittest.TestCase):
         invalid_data = b"Invalid JSON response"
 
         with self.assertRaises(ConnectionError) as cm:
-            self.ccp._parse_ccp_response(invalid_data, 500)
+            self.ccp._parse_ccp_response(invalid_data, 500)  # pylint: disable=protected-access
 
         error_msg = str(cm.exception)
         self.assertIn("Invalid response from CCP", error_msg)
@@ -95,7 +97,7 @@ class TestProductionMode(unittest.TestCase):
         }
         success_data = json.dumps(success_response).encode('utf-8')
 
-        result = self.ccp._parse_ccp_response(success_data, 200)
+        result = self.ccp._parse_ccp_response(success_data, 200)  # pylint: disable=protected-access
 
         self.assertEqual(result["Content"], "test_password")
         self.assertEqual(result["UserName"], "test_user")
@@ -123,7 +125,7 @@ class TestProductionMode(unittest.TestCase):
                 # Verify the connection was made (indicating no dictionary errors)
                 mock_conn.assert_called_once()
 
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 self.fail(f"dual_accounts functionality failed: {e}")
 
     def test_ssl_error_handling(self):
